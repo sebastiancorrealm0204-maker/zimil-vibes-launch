@@ -75,8 +75,8 @@ export function Hero({ userCount }: { userCount: number }) {
           {/* Social proof */}
           <div className="mt-8 flex items-center justify-center gap-2.5 text-sm text-muted-foreground lg:justify-start">
             <span className="relative inline-flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
             </span>
             <span>
               <span className="font-semibold text-foreground">{userCount.toLocaleString("es-CO")}</span>{" "}
