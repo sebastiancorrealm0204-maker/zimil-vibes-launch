@@ -49,12 +49,8 @@ function Index() {
       <main className="flex-1">
         <Hero userCount={userCount} />
 
-        {/* Anchors for in-page navigation — sections coming next */}
-        <section
-          id="how-it-works"
-          aria-label="Cómo funciona"
-          className="mx-auto w-full max-w-6xl px-5 sm:px-8"
-        />
+        <HowItWorks />
+
         <section
           id="waitlist"
           aria-label="Lista de espera"
