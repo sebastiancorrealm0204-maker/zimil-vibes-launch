@@ -3,6 +3,7 @@ import { BackgroundOrbs } from "@/components/BackgroundOrbs";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
+import { HowItWorks } from "@/components/HowItWorks";
 import { getWaitlistUserCount } from "@/server/waitlist";
 
 export const Route = createFileRoute("/")({
@@ -49,12 +50,8 @@ function Index() {
       <main className="flex-1">
         <Hero userCount={userCount} />
 
-        {/* Anchors for in-page navigation — sections coming next */}
-        <section
-          id="how-it-works"
-          aria-label="Cómo funciona"
-          className="mx-auto w-full max-w-6xl px-5 sm:px-8"
-        />
+        <HowItWorks />
+
         <section
           id="waitlist"
           aria-label="Lista de espera"
