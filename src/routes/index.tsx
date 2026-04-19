@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
+import { PrivacyAndUrgency } from "@/components/PrivacyAndUrgency";
 import { getWaitlistUserCount } from "@/server/waitlist";
 
 export const Route = createFileRoute("/")({
@@ -51,6 +52,8 @@ function Index() {
         <Hero userCount={userCount} />
 
         <HowItWorks />
+
+        <PrivacyAndUrgency />
 
         <section
           id="waitlist"
