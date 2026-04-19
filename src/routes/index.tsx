@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PrivacyAndUrgency } from "@/components/PrivacyAndUrgency";
+import { Waitlist } from "@/components/Waitlist";
 import { getWaitlistUserCount } from "@/server/waitlist";
 
 export const Route = createFileRoute("/")({
@@ -55,11 +56,7 @@ function Index() {
 
         <PrivacyAndUrgency />
 
-        <section
-          id="waitlist"
-          aria-label="Lista de espera"
-          className="mx-auto w-full max-w-6xl px-5 py-32 sm:px-8"
-        />
+        <Waitlist initialCount={userCount} />
       </main>
 
       <Footer />
