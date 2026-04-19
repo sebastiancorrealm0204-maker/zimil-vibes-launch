@@ -37,7 +37,16 @@ const STEPS: Step[] = [
   },
 ];
 
-const CARDS = [
+type Card = {
+  n: string;
+  title: string;
+  body: string;
+  border: string;
+  accent: string;
+  isGradient?: boolean;
+};
+
+const CARDS: Card[] = [
   {
     n: "01",
     title: "ZIMIL construye tu Gemelo Digital",
@@ -60,7 +69,7 @@ const CARDS = [
     accent: "linear-gradient(180deg, var(--color-primary), var(--color-accent))",
     isGradient: true,
   },
-] as const;
+];
 
 function useInViewSequential(count: number) {
   const containerRef = useRef<HTMLDivElement>(null);

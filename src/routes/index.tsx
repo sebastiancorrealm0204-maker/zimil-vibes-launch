@@ -3,6 +3,7 @@ import { BackgroundOrbs } from "@/components/BackgroundOrbs";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
+import { HowItWorks } from "@/components/HowItWorks";
 import { getWaitlistUserCount } from "@/server/waitlist";
 
 export const Route = createFileRoute("/")({
