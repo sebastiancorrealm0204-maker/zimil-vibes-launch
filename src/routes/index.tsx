@@ -1,26 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { BackgroundOrbs } from "@/components/BackgroundOrbs";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "ZIMIL — Tu comportamiento. Tu capital." },
+      {
+        name: "description",
+        content:
+          "ZIMIL convierte tu manera de moverte con la plata en oportunidades reales. Únete a la lista de espera.",
+      },
+      { property: "og:title", content: "ZIMIL — Tu comportamiento. Tu capital." },
+      {
+        property: "og:description",
+        content:
+          "ZIMIL convierte tu manera de moverte con la plata en oportunidades reales. Únete a la lista de espera.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="relative flex min-h-screen flex-col">
+      <BackgroundOrbs />
+      <Header />
+
+      <main className="flex-1">
+        {/* Hero coming next */}
+        <section
+          id="waitlist"
+          aria-label="Lista de espera"
+          className="mx-auto w-full max-w-6xl px-5 py-32 sm:px-8"
+        >
+          {/* Waitlist form placeholder — to be built next */}
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
