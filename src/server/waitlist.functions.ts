@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const JoinSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -26,6 +25,7 @@ export const joinWaitlist = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }): Promise<JoinResult> => {
     try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       const { error } = await supabaseAdmin.from("waitlist").insert({
         name: data.name,
         email: data.email,
