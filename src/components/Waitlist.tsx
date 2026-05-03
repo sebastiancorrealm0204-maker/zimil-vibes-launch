@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { joinWaitlist } from "@/server/waitlist";
+import { joinWaitlist } from "@/server/waitlist.functions";
 
 const CITIES = [
   "Bogotá",
