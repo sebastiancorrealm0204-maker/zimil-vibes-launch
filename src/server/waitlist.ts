@@ -2,34 +2,19 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-/**
- * Waitlist count for type='user'.
- * Uses admin client so the public table policies stay insert-only.
- */
-export const getWaitlistUserCount = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const { count, error } = await supabaseAdmin
-      .from("waitlist")
-      .select("*", { count: "exact", head: true })
-      .eq("type", "user");
-
-    if (error) {
-      console.error("getWaitlistUserCount error:", error);
-      return { count: 0 };
-    }
-    return { count: count ?? 0 };
-  },
-);
-
 const JoinSchema = z.object({
   name: z.string().trim().min(1).max(80),
   email: z.string().trim().toLowerCase().email().max(254),
+  phone: z.string().trim().regex(/^\d{10}$/),
+  age_range: z.string().trim().min(1).max(40),
+  top_categories: z.string().trim().max(300),
+  payment_apps: z.string().trim().max(300),
   city: z.string().trim().min(1).max(80),
 });
 
 export type JoinResult =
   | { ok: true; alreadyIn: boolean }
-  | { ok: false; code: "invalid_email" | "error"; message: string };
+  | { ok: false; code: "invalid_email" | "invalid_phone" | "error"; message: string };
 
 export const joinWaitlist = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => {
@@ -44,12 +29,15 @@ export const joinWaitlist = createServerFn({ method: "POST" })
       const { error } = await supabaseAdmin.from("waitlist").insert({
         name: data.name,
         email: data.email,
+        phone: data.phone,
+        age_range: data.age_range,
+        top_categories: data.top_categories,
+        payment_apps: data.payment_apps,
         city: data.city,
         type: "user",
       });
 
       if (error) {
-        // 23505 = unique_violation on lower(email) index
         if (error.code === "23505") {
           return { ok: true, alreadyIn: true };
         }
