@@ -12,8 +12,8 @@ type Step = {
 const STEPS: Step[] = [
   {
     icon: MessageCircle,
-    title: "3 preguntas rápidas",
-    body: "Cómo describes tu estilo de vida, en qué gastas más, qué apps usas. 30 segundos.",
+    title: "Algunas preguntas rápidas",
+    body: "Cuéntanos un poco sobre ti — tus gustos, hábitos y estilo de vida. Solo toma un momento.",
     badge: "Gemelo al 20%",
   },
   {
