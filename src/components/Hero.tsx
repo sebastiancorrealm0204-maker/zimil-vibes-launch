@@ -10,7 +10,7 @@ function scrollToId(id: string) {
   };
 }
 
-export function Hero({ userCount }: { userCount: number }) {
+export function Hero() {
   return (
     <section
       aria-label="Hero"
@@ -30,7 +30,7 @@ export function Hero({ userCount }: { userCount: number }) {
             >
               🔒 Lista de espera
             </span>
-            <span className="text-muted-foreground">Bogotá · Cupos limitados</span>
+            <span className="text-muted-foreground">Colombia · Cupos limitados</span>
           </div>
 
           {/* H1 */}
@@ -70,18 +70,6 @@ export function Hero({ userCount }: { userCount: number }) {
               ¿Cómo funciona?
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
-          </div>
-
-          {/* Social proof */}
-          <div className="mt-8 flex items-center justify-center gap-2.5 text-sm text-muted-foreground lg:justify-start">
-            <span className="relative inline-flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-success" />
-            </span>
-            <span>
-              <span className="font-semibold text-foreground">{userCount.toLocaleString("es-CO")}</span>{" "}
-              {userCount === 1 ? "persona ya reservó su lugar" : "personas ya reservaron su lugar"} en Bogotá
-            </span>
           </div>
         </div>
 
