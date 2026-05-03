@@ -153,7 +153,7 @@ export function Waitlist() {
     }
   }
 
-  const shareUrl = "https://zimil-vibes-launch.lovable.app/";
+  const shareUrl = "https://zimil.co/";
   const shareText = `Acabo de reservar mi lugar en ZIMIL — una IA que te paga cuando las marcas consultan tu perfil. Únete: ${shareUrl}`;
 
   function handleCopy() {
