@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import { Lock, EyeOff, X, Copy, MessageCircle, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { joinWaitlist } from "@/server/waitlist.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 const CITIES = [
   "Bogotá",
@@ -62,7 +61,7 @@ function isValidPhone(phone: string) {
 }
 
 export function Waitlist() {
-  const join = useServerFn(joinWaitlist);
+  
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
@@ -128,22 +127,25 @@ export function Waitlist() {
     }
     setSubmitting(true);
     try {
-      const res = await join({
-        data: {
-          name: name.trim(),
+      const { error } = await supabase.from("waitlist").insert({
+        name: name.trim(),
           email: email.trim(),
           phone: phone.trim(),
           age_range: ageRange,
           top_categories: categories.join(", "),
           payment_apps: apps.join(", "),
           city,
-        },
-      });
-      if (res.ok) {
-        setSuccess({ alreadyIn: res.alreadyIn });
-      } else {
-        setErrorMsg(res.message ?? "Algo falló. Intenta de nuevo.");
-      }
+          type: "user",
+        });
+        if (error) {
+          if (error.code === "23505") {
+            setSuccess({ alreadyIn: true });
+          } else {
+            setErrorMsg("Algo falló. Intenta de nuevo.");
+          }
+        } else {
+          setSuccess({ alreadyIn: false });
+        }
     } catch {
       setErrorMsg("Algo falló. Intenta de nuevo.");
     } finally {
