@@ -6,6 +6,7 @@ import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { BuildZimil } from "@/components/BuildZimil";
 import { PrivacyAndUrgency } from "@/components/PrivacyAndUrgency";
+import { DataHeist } from "@/components/DataHeist";
 import { Waitlist } from "@/components/Waitlist";
 
 export const Route = createFileRoute("/")({
@@ -47,6 +48,7 @@ function Index() {
         <HowItWorks />
         <BuildZimil />
         <PrivacyAndUrgency />
+        <DataHeist />
         <Waitlist />
       </main>
 
