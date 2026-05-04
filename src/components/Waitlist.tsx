@@ -61,7 +61,6 @@ function isValidPhone(phone: string) {
 }
 
 export function Waitlist() {
-  
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
@@ -129,23 +128,23 @@ export function Waitlist() {
     try {
       const { error } = await supabase.from("waitlist").insert({
         name: name.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          age_range: ageRange,
-          top_categories: categories.join(", "),
-          payment_apps: apps.join(", "),
-          city,
-          type: "user",
-        });
-        if (error) {
-          if (error.code === "23505") {
-            setSuccess({ alreadyIn: true });
-          } else {
-            setErrorMsg("Algo falló. Intenta de nuevo.");
-          }
+        email: email.trim(),
+        phone: phone.trim(),
+        age_range: ageRange,
+        top_categories: categories.join(", "),
+        payment_apps: apps.join(", "),
+        city,
+        type: "user",
+      });
+      if (error) {
+        if (error.code === "23505") {
+          setSuccess({ alreadyIn: true });
         } else {
-          setSuccess({ alreadyIn: false });
+          setErrorMsg("Algo falló. Intenta de nuevo.");
         }
+      } else {
+        setSuccess({ alreadyIn: false });
+      }
     } catch {
       setErrorMsg("Algo falló. Intenta de nuevo.");
     } finally {
