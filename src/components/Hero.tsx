@@ -35,7 +35,7 @@ export function Hero() {
 
           {/* H1 */}
           <h1 className="mt-6 font-display text-[2.6rem] font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-            Las marcas pagan por entenderte.{" "}
+            Llevas años generando valor para{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{
@@ -43,15 +43,14 @@ export function Hero() {
                   "linear-gradient(120deg, var(--color-primary-glow), var(--color-accent))",
               }}
             >
-              Tú deberías cobrar.
+              las empresas más grandes del mundo.
             </span>
           </h1>
 
           {/* Subheadline */}
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
-            ZIMIL crea una IA que te representa. Las marcas le hacen preguntas
-            sobre ti y tú recibes el pago automáticamente. Tus datos siguen
-            siendo tuyos — siempre.
+            Tus hábitos, tus gustos, tu vida — y tú nunca has visto un peso.
+            ZIMIL cambia eso: tu comportamiento genera ingresos reales, directamente para ti.
           </p>
 
           {/* CTAs */}
