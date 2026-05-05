@@ -35,7 +35,7 @@ export function Hero() {
 
           {/* H1 */}
           <h1 className="mt-6 font-display text-[2.6rem] font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-            Llevas años generando valor para{" "}
+            Llevas años generando valor{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{
@@ -43,7 +43,7 @@ export function Hero() {
                   "linear-gradient(120deg, var(--color-primary-glow), var(--color-accent))",
               }}
             >
-              las empresas más grandes del mundo.
+              para otros.
             </span>
           </h1>
 
