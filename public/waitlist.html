@@ -7,44 +7,44 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0D0D18; color: white; padding: 32px 20px; min-height: 100vh; }
-  .card { max-width: 520px; margin: 0 auto; background: rgba(255,255,255,0.03); border: 1px solid rgba(139,92,246,0.3); border-radius: 24px; padding: 32px; box-shadow: 0 0 40px -8px rgba(139,92,246,0.4); }
-  .progress-bar { background: rgba(255,255,255,0.08); border-radius: 99px; height: 8px; margin: 12px 0 24px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F8F7F4; color: #111111; padding: 32px 20px; min-height: 100vh; }
+  .card { max-width: 520px; margin: 0 auto; background: #FFFFFF; border: 1px solid rgba(0,0,0,0.08); border-radius: 24px; padding: 32px; box-shadow: 0 4px 32px rgba(0,0,0,0.06); }
+  .progress-bar { background: rgba(0,0,0,0.08); border-radius: 99px; height: 8px; margin: 12px 0 24px; }
   .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #7c3aed, #db2777); transition: width 0.4s ease; }
-  .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); }
-  label { display: block; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 8px; margin-top: 16px; }
-  input, select { width: 100%; height: 48px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; font-size: 16px; padding: 0 16px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: #9CA3AF; }
+  label { display: block; font-size: 14px; color: #374151; margin-bottom: 8px; margin-top: 16px; }
+  input, select { width: 100%; height: 48px; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; color: #111111; font-size: 16px; padding: 0 16px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
   input:focus, select:focus { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124,58,237,0.3); }
-  input::placeholder { color: rgba(255,255,255,0.3); }
-  select option { background: #1a1a2e; color: white; }
-  .hint { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 6px; }
-  .btn { width: 100%; padding: 16px; border: none; border-radius: 99px; background: linear-gradient(135deg, #7c3aed, #db2777); color: white; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: opacity 0.2s; }
+  input::placeholder { color: #9CA3AF; }
+  select option { background: #F0EFF0; color: #111111; }
+  .hint { font-size: 12px; color: #9CA3AF; margin-top: 6px; }
+  .btn { width: 100%; padding: 16px; border: none; border-radius: 99px; background: linear-gradient(135deg, #7c3aed, #db2777); color: #111111; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: opacity 0.2s; }
   .btn:hover { opacity: 0.9; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .back-btn { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; padding: 0; margin-bottom: 16px; }
-  .back-btn:hover { color: white; }
+  .back-btn { background: none; border: none; color: #9CA3AF; font-size: 14px; cursor: pointer; padding: 0; margin-bottom: 16px; }
+  .back-btn:hover { color: #111111; }
   .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
-  .pill { padding: 12px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 99px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; }
-  .pill:hover { border-color: rgba(255,255,255,0.3); }
+  .pill { padding: 12px 16px; border: 1px solid rgba(0,0,0,0.08); border-radius: 99px; background: rgba(0,0,0,0.03); color: #111111; font-size: 14px; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; }
+  .pill:hover { border-color: #9CA3AF; }
   .pill.selected { background: linear-gradient(120deg, #7c3aed, #db2777); border-color: transparent; }
   .error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #f87171; margin-top: 12px; display: none; }
   .step { display: none; }
   .step.active { display: block; }
   h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-  .sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
-  .psico-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 4px; margin-bottom: 16px; }
+  .sub { font-size: 14px; color: #9CA3AF; margin-bottom: 4px; }
+  .psico-sub { font-size: 13px; color: #9CA3AF; margin-top: 4px; margin-bottom: 16px; }
   .success { text-align: center; padding: 16px 0; display: none; }
   .share-btns { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-  .share-btn { padding: 10px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 99px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .share-btn:hover { border-color: rgba(255,255,255,0.3); }
-  .miv-preview { background: rgba(255,255,255,0.04); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; padding: 16px; margin-top: 20px; }
-  .miv-preview-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-bottom: 12px; }
+  .share-btn { padding: 10px 20px; border: 1px solid rgba(0,0,0,0.08); border-radius: 99px; background: rgba(0,0,0,0.03); color: #111111; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .share-btn:hover { border-color: #9CA3AF; }
+  .miv-preview { background: rgba(0,0,0,0.02); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; padding: 16px; margin-top: 20px; }
+  .miv-preview-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #9CA3AF; margin-bottom: 12px; }
   .miv-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .miv-bar-label { font-size: 12px; color: rgba(255,255,255,0.5); width: 150px; flex-shrink: 0; }
-  .miv-bar-track { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .miv-bar-label { font-size: 12px; color: #6B7280; width: 150px; flex-shrink: 0; }
+  .miv-bar-track { flex: 1; height: 4px; background: rgba(0,0,0,0.06); border-radius: 2px; }
   .miv-bar-fill { height: 4px; border-radius: 2px; background: linear-gradient(90deg, #7c3aed, #db2777); transition: width 0.5s ease; }
-  .miv-bar-val { font-size: 12px; color: rgba(255,255,255,0.4); width: 36px; text-align: right; }
-  .completitud-badge { display: inline-block; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); border-radius: 99px; padding: 4px 14px; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
+  .miv-bar-val { font-size: 12px; color: #9CA3AF; width: 36px; text-align: right; }
+  .completitud-badge { display: inline-block; background: rgba(139,92,246,0.15); border: 1px solid rgba(124,58,237,0.2); border-radius: 99px; padding: 4px 14px; font-size: 12px; color: #4B5563; margin-bottom: 14px; }
   .pill-single { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
   .pill-single .pill { border-radius: 12px; text-align: left; padding: 12px 18px; }
 </style>
@@ -193,13 +193,13 @@
 
   <div class="success" id="success-area">
     <div style="font-size:56px;margin-bottom:16px">&#x1F9EC;</div>
-    <h3 id="success-title" style="font-size:22px;margin-bottom:12px">&iexcl;Completaste el primer paso!</h3>
-    <p style="color:rgba(255,255,255,0.7);margin-top:0;font-size:16px;line-height:1.7;margin-bottom:20px" id="success-msg">
-      Tu gemelo digital ya existe. Cuando ZIMIL est&eacute; habilitado para ti, te avisamos por email para que completes el proceso y empieces a <strong style="color:white">ganar dinero con tu comportamiento</strong> &mdash; sin vender nada, sin hacer nada extra.
+    <h3 id="success-title" style="color:#111111;font-size:22px;margin-bottom:12px">&iexcl;Completaste el primer paso!</h3>
+    <p style="color:#374151;margin-top:0;font-size:16px;line-height:1.7;margin-bottom:20px" id="success-msg">
+      Tu gemelo digital ya existe. Cuando ZIMIL est&eacute; habilitado para ti, te avisamos por email para que completes el proceso y empieces a <strong style="color:#111111">ganar dinero con tu comportamiento</strong> &mdash; sin vender nada, sin hacer nada extra.
     </p>
-    <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:16px 20px;margin-bottom:24px;text-align:left">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:10px">Lo que viene despu&eacute;s</div>
-      <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.8">
+    <div style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:16px;padding:16px 20px;margin-bottom:24px;text-align:left">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#9CA3AF;margin-bottom:10px">Lo que viene despu&eacute;s</div>
+      <div style="font-size:14px;color:#6B7280;line-height:1.8">
         &#x1F4E7; &nbsp;Recibes un email cuando tu acceso est&eacute; listo<br>
         &#x1F4EC; &nbsp;Conectas tu correo para que el gemelo detecte tus compras<br>
         &#x1F4F1; &nbsp;Subes tu archivo de Instagram o TikTok para completar tu perfil<br>
