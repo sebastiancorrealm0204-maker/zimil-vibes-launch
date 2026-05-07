@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { BackgroundOrbs } from "@/components/BackgroundOrbs";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
-import { BuildZimil } from "@/components/BuildZimil";
 import { PrivacyAndUrgency } from "@/components/PrivacyAndUrgency";
-import { DataHeist } from "@/components/DataHeist";
 import { Waitlist } from "@/components/Waitlist";
+
+const BuildZimil = lazy(() => import("@/components/BuildZimil").then(m => ({ default: m.BuildZimil })));
+const DataHeist = lazy(() => import("@/components/DataHeist").then(m => ({ default: m.DataHeist })));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,9 +48,13 @@ function Index() {
       <main className="flex-1">
         <Hero />
         <HowItWorks />
-        <BuildZimil />
+        <Suspense fallback={<div className="py-20" />}>
+          <BuildZimil />
+        </Suspense>
         <PrivacyAndUrgency />
-        <DataHeist />
+        <Suspense fallback={<div className="py-20" />}>
+          <DataHeist />
+        </Suspense>
         <Waitlist />
       </main>
 
