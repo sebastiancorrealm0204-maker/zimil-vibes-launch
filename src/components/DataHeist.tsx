@@ -64,9 +64,9 @@ export function DataHeist() {
     const interval = setInterval(() => {
       const company = COMPANIES[Math.floor(Math.random() * COMPANIES.length)];
       const newTx: Transaction = { id: idRef.current++, company, timestamp: getTime() };
-      setTransactions((prev) => [newTx, ...prev].slice(0, 6));
+      setTransactions((prev) => [newTx, ...prev].slice(0, 4));
       setTotal((prev) => prev + company.value);
-    }, 1800);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [visible]);
