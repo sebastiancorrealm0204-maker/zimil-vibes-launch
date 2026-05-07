@@ -192,11 +192,19 @@
   </div>
 
   <div class="success" id="success-area">
-    <div style="font-size:64px;margin-bottom:16px">&#x2705;</div>
-    <h3 id="success-title">&iexcl;Est&aacute;s dentro!</h3>
-    <p style="color:rgba(255,255,255,0.5);margin-top:12px;font-size:15px;line-height:1.6" id="success-msg">
-      Te avisamos por email cuando tu acceso est&eacute; listo. Cu&eacute;ntale a alguien &mdash; entre m&aacute;s personas en la lista, antes abrimos.
+    <div style="font-size:56px;margin-bottom:16px">&#x1F9EC;</div>
+    <h3 id="success-title" style="font-size:22px;margin-bottom:12px">&iexcl;Completaste el primer paso!</h3>
+    <p style="color:rgba(255,255,255,0.7);margin-top:0;font-size:16px;line-height:1.7;margin-bottom:20px" id="success-msg">
+      Tu gemelo digital ya existe. Cuando ZIMIL est&eacute; habilitado para ti, te avisamos por email para que completes el proceso y empieces a <strong style="color:white">ganar dinero con tu comportamiento</strong> &mdash; sin vender nada, sin hacer nada extra.
     </p>
+    <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:16px 20px;margin-bottom:24px;text-align:left">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:10px">Lo que viene despu&eacute;s</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.8">
+        &#x1F4E7; &nbsp;Recibes un email cuando tu acceso est&eacute; listo<br>
+        &#x1F517; &nbsp;Conectas Gmail en 1 clic para fortalecer tu gemelo<br>
+        &#x1F4B8; &nbsp;Las marcas consultan tu perfil y t&uacute; cobras autom&aacute;ticamente
+      </div>
+    </div>
     <div class="share-btns">
       <a id="wa-btn" href="#" target="_blank" class="share-btn">&#x1F4AC; Compartir en WhatsApp</a>
       <button type="button" class="share-btn" id="copy-btn">&#x1F517; Copiar enlace</button>
@@ -364,8 +372,8 @@ document.getElementById('btn-submit').addEventListener('click', async function()
     miv: miv
   });
   if (result.error && result.error.code === '23505') {
-    document.getElementById('success-title').textContent = 'Ya estas en la lista!';
-    document.getElementById('success-msg').textContent = 'Te avisamos pronto en cuanto tu acceso este listo.';
+    document.getElementById('success-title').textContent = 'Ya completaste el primer paso!';
+    document.getElementById('success-msg').textContent = 'Tu gemelo ya existe. Te avisamos cuando tu ZIMIL este habilitado para que empieces a ganar.';
   } else if (result.error) {
     err.textContent = 'Algo fallo. Intenta de nuevo.'; err.style.display='block';
     this.disabled=false; this.textContent='Quiero mi lugar en ZIMIL'; return;
