@@ -2,13 +2,6 @@ import { useState } from "react";
 import { Lock, EyeOff, X, Copy, MessageCircle, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -422,18 +415,16 @@ export function Waitlist() {
                     <h3 className="font-display text-xl font-semibold text-foreground sm:text-2xl">
                       ¿En qué ciudad estás?
                     </h3>
-                    <Select value={city} onValueChange={setCity}>
-                      <SelectTrigger className="h-12 rounded-xl border-white/10 bg-background/60 text-base">
-                        <SelectValue placeholder="Selecciona tu ciudad" />
-                      </SelectTrigger>
-                      <SelectContent>
+                      <select
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="h-12 w-full rounded-xl border border-white/10 bg-background/60 text-base text-foreground px-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="" disabled>Selecciona tu ciudad</option>
                         {CITIES.map((c) => (
-                          <SelectItem key={c} value={c}>
-                            {c}
-                          </SelectItem>
+                          <option key={c} value={c}>{c}</option>
                         ))}
-                      </SelectContent>
-                    </Select>
+                      </select>
 
                     {errorMsg && <ErrorBox msg={errorMsg} />}
 
