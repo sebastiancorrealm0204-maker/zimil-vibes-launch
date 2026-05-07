@@ -22,15 +22,15 @@ export function DataHeist() {
   return (
     <section ref={ref} className="relative w-full py-24 px-5" style={{ backgroundColor: "#0D0D18" }}>
       <div className="mx-auto max-w-4xl">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">El problema</p>
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55 mb-3">El problema</p>
         <h2
           className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-4 transition-all duration-700"
           style={{ opacity: visible ? 1 : 0, transform: visible ? "none" : "translateY(16px)" }}
         >
           Cada vez que usas internet,<br />
-          <span className="text-white/40">alguien gana con tus datos. Menos tú.</span>
+          <span className="text-white/60">alguien gana con tus datos. Menos tú.</span>
         </h2>
-        <p className="text-center text-sm text-white/30 mb-14">
+        <p className="text-center text-sm text-white/55 mb-14">
           Esto ocurre ahora mismo, mientras lees esto.
         </p>
 
@@ -43,7 +43,7 @@ export function DataHeist() {
             >
               <div>
                 <p className="text-sm font-medium text-white/70">{p.label}</p>
-                <p className="text-xs text-white/30 mt-0.5">{p.action}</p>
+                <p className="text-xs text-white/55 mt-0.5">{p.action}</p>
               </div>
               <span className="text-xs font-mono text-red-400/70">sin pagarte</span>
             </div>
@@ -54,7 +54,7 @@ export function DataHeist() {
           className="mt-10 rounded-2xl border border-violet-500/20 bg-violet-500/5 p-8 text-center transition-all duration-700"
           style={{ opacity: visible ? 1 : 0, transitionDelay: "500ms" }}
         >
-          <p className="text-white/50 text-sm mb-2">La alternativa existe.</p>
+          <p className="text-white/65 text-sm mb-2">La alternativa existe.</p>
           <p className="text-white font-bold text-lg">Con ZIMIL, ese dinero es tuyo.</p>
         </div>
       </div>

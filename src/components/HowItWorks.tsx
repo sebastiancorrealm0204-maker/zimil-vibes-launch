@@ -65,7 +65,7 @@ export function HowItWorks() {
       {/* Qué es ZIMIL */}
       <section className="w-full" style={{ backgroundColor: "#0D0D18" }}>
         <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">Qué es ZIMIL</p>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55 mb-3">Qué es ZIMIL</p>
           <h2 className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-16">
             Una IA que trabaja por ti mientras haces tu vida
           </h2>
@@ -80,7 +80,7 @@ export function HowItWorks() {
                 <span className="font-display text-3xl font-bold text-white/10 leading-none shrink-0 w-10">{s.n}</span>
                 <div>
                   <h3 className="font-semibold text-white mb-1">{s.title}</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">{s.body}</p>
+                  <p className="text-sm text-white/60 leading-relaxed">{s.body}</p>
                 </div>
               </div>
             ))}
@@ -91,11 +91,11 @@ export function HowItWorks() {
       {/* Construye tu gemelo */}
       <section className="w-full" style={{ backgroundColor: "#08080E" }}>
         <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">Construye tu gemelo</p>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55 mb-3">Construye tu gemelo</p>
           <h2 className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-4">
             Empieza en 30 segundos. Mejora cuando quieras.
           </h2>
-          <p className="text-center text-sm text-white/30 mb-16">Más completo el gemelo, más consultas, más ingresos.</p>
+          <p className="text-center text-sm text-white/55 mb-16">Más completo el gemelo, más consultas, más ingresos.</p>
 
           <div ref={build.ref} className="space-y-3">
             {BUILD_STEPS.map((s, i) => (
@@ -112,9 +112,9 @@ export function HowItWorks() {
                 </span>
                 <div className="flex-1">
                   <h3 className="font-semibold text-white text-sm">{s.title}</h3>
-                  <p className="text-xs text-white/40 leading-relaxed mt-0.5">{s.body}</p>
+                  <p className="text-xs text-white/60 leading-relaxed mt-0.5">{s.body}</p>
                 </div>
-                <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-xs text-white/40">
+                <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-xs text-white/60">
                   {s.badge}
                 </span>
               </div>

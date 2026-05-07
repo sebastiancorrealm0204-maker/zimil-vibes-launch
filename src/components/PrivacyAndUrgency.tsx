@@ -34,11 +34,11 @@ export function PrivacyAndUrgency() {
       {/* Privacidad */}
       <section id="privacidad" className="w-full" style={{ backgroundColor: "#08080E" }}>
         <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">Privacidad</p>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55 mb-3">Privacidad</p>
           <h2 className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-4">
             Tus datos son tuyos. Siempre.
           </h2>
-          <p className="text-center text-sm text-white/30 mb-14">No pedimos que confíes ciegamente — te mostramos cómo funciona.</p>
+          <p className="text-center text-sm text-white/55 mb-14">No pedimos que confíes ciegamente — te mostramos cómo funciona.</p>
 
           <div className="grid grid-cols-2 gap-2 mb-3">
             <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-2 text-center text-xs font-semibold uppercase tracking-wider text-red-400">Lo que NO hacemos</div>
@@ -54,7 +54,7 @@ export function PrivacyAndUrgency() {
               >
                 <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
                   <X className="h-4 w-4 shrink-0 mt-0.5 text-red-400/60" />
-                  <p className="text-xs leading-relaxed text-white/30 line-through decoration-red-400/30">{row.no}</p>
+                  <p className="text-xs leading-relaxed text-white/55 line-through decoration-red-400/30">{row.no}</p>
                 </div>
                 <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-4">
                   <Check className="h-4 w-4 shrink-0 mt-0.5 text-emerald-400/80" />
@@ -69,11 +69,11 @@ export function PrivacyAndUrgency() {
       {/* Por qué ahora */}
       <section id="por-que-ahora" className="w-full" style={{ backgroundColor: "#0D0D18" }}>
         <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">Por qué ahora</p>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55 mb-3">Por qué ahora</p>
           <h2 className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-4">
             El primer millar lo cambia todo.
           </h2>
-          <p className="text-center text-sm text-white/30 mb-14 max-w-xl mx-auto">
+          <p className="text-center text-sm text-white/55 mb-14 max-w-xl mx-auto">
             ZIMIL vale más cuando hay más gemelos. Los que entran primero son los más consultados — porque son los únicos disponibles para las marcas del piloto.
           </p>
 
@@ -85,12 +85,12 @@ export function PrivacyAndUrgency() {
                 style={{ opacity: urgency.visible ? 1 : 0, transform: urgency.visible ? "none" : "translateY(16px)", transitionDelay: `${i * 100}ms` }}
               >
                 <h3 className="font-semibold text-white text-sm mb-2">{b.title}</h3>
-                <p className="text-xs text-white/40 leading-relaxed">{b.body}</p>
+                <p className="text-xs text-white/60 leading-relaxed">{b.body}</p>
               </div>
             ))}
           </div>
 
-          <p className="text-center mt-14 text-white/30 text-sm font-medium">
+          <p className="text-center mt-14 text-white/55 text-sm font-medium">
             No hay segunda oportunidad de ser el primero.
           </p>
         </div>

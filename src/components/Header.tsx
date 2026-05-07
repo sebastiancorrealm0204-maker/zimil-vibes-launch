@@ -30,7 +30,7 @@ export function Header({ onOpenWaitlist }: { onOpenWaitlist?: () => void } = {})
               key={link.label}
               href={link.href}
               onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-              className="text-sm text-white/50 transition-colors hover:text-white"
+              className="text-sm text-white/65 transition-colors hover:text-white"
             >
               {link.label}
             </a>
