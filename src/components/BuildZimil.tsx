@@ -64,13 +64,13 @@ export function BuildZimil() {
     let n = 0;
     const target = 94;
     const id = setInterval(() => {
-      n += 2;
+      n += 3;
       if (n >= target) {
         n = target;
         clearInterval(id);
       }
       setCounter(n);
-    }, 30);
+    }, 50);
     return () => clearInterval(id);
   }, [activeStep]);
 
