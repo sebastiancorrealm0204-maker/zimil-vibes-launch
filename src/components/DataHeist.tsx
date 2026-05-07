@@ -61,7 +61,10 @@ export function DataHeist() {
     setTransactions(initial);
     setTotal(initial.reduce((sum, t) => sum + t.company.value, 0));
 
+    let count = 0;
     const interval = setInterval(() => {
+      if (count >= 12) { clearInterval(interval); return; }
+      count++;
       const company = COMPANIES[Math.floor(Math.random() * COMPANIES.length)];
       const newTx: Transaction = { id: idRef.current++, company, timestamp: getTime() };
       setTransactions((prev) => [newTx, ...prev].slice(0, 4));
