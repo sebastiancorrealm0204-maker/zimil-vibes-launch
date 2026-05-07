@@ -8,7 +8,7 @@ function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>) {
   }
 }
 
-export function Header() {
+export function Header({ onOpenWaitlist }: { onOpenWaitlist?: () => void } = {}) {
   return (
     <header className="sticky top-0 z-40 w-full">
       <div className="absolute inset-0 -z-10 bg-background/60 backdrop-blur-xl" />
@@ -22,7 +22,7 @@ export function Header() {
         </a>
 
         <Button asChild size="sm" className="rounded-full px-5 font-semibold sm:size-default sm:px-6">
-          <a href="/waitlist.html" onClick={handleCtaClick}>
+          <a href="#waitlist" onClick={(e) => { e.preventDefault(); onOpenWaitlist?.(); }}>
             Quiero entrar
           </a>
         </Button>

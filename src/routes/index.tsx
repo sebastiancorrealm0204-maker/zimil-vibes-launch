@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { BackgroundOrbs } from "@/components/BackgroundOrbs";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PrivacyAndUrgency } from "@/components/PrivacyAndUrgency";
+import { DataHeist } from "@/components/DataHeist";
+import { WaitlistModal } from "@/components/WaitlistModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,23 +38,27 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="relative flex min-h-screen flex-col">
       <BackgroundOrbs />
-      <Header />
+      <Header onOpenWaitlist={() => setShowModal(true)} />
 
       <main className="flex-1">
-        <Hero />
+        <Hero onOpenWaitlist={() => setShowModal(true)} />
         <HowItWorks />
         <PrivacyAndUrgency />
-        <section style={{ backgroundColor: "#0D0D18" }} className="py-20 px-5 text-center">
+        <DataHeist />
+        <section id="waitlist" style={{ backgroundColor: "#0D0D18" }} className="py-20 px-5 text-center">
           <h2 className="text-4xl font-bold text-white mb-4">Tu lugar está <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(120deg, #a855f7, #ec4899)" }}>esperando.</span></h2>
           <p className="text-white/50 mb-8 text-lg">Únete a la lista de espera. Te avisamos cuando ZIMIL abre en Colombia.</p>
-          <a href="/waitlist.html" className="inline-block rounded-full px-8 py-4 text-base font-bold text-white" style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}>Quiero mi lugar en ZIMIL 🚀</a>
+          <button onClick={() => setShowModal(true)} className="inline-block rounded-full px-8 py-4 text-base font-bold text-white border-0 cursor-pointer" style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}>Quiero mi lugar en ZIMIL 🚀</button>
         </section>
       </main>
 
       <Footer />
+      {showModal && <WaitlistModal onClose={() => setShowModal(false)} />}
     </div>
   );
 }

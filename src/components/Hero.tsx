@@ -10,7 +10,7 @@ function scrollToId(id: string) {
   };
 }
 
-export function Hero() {
+export function Hero({ onOpenWaitlist }: { onOpenWaitlist?: () => void }) {
   return (
     <section
       aria-label="Hero"
@@ -56,7 +56,7 @@ export function Hero() {
           {/* CTAs */}
           <div className="mt-9 flex flex-col items-center gap-4 lg:items-start">
             <Button asChild variant="hero" size="xl">
-              <a href="/waitlist.html" onClick={scrollToId("waitlist")}>
+              <a href="#waitlist" onClick={(e) => { e.preventDefault(); onOpenWaitlist?.(); }}>
                 Quiero mi lugar
               </a>
             </Button>
