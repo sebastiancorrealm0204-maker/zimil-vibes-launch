@@ -17,18 +17,15 @@ export function Hero({ onOpenWaitlist }: { onOpenWaitlist?: () => void }) {
 
       {/* H1 */}
       <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
-        Tu comportamiento
-        <br />
+        Llevas años generando valor{" "}
         <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(120deg, #a78bfa, #f472b6)" }}>
-          genera dinero para otros.
+          para otros.
         </span>
-        <br />
-        <span className="text-white/90">Ya debería ser tuyo.</span>
       </h1>
 
       {/* Sub */}
       <p className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-white/40 sm:text-lg">
-        ZIMIL crea un gemelo digital que te representa. Cuando las marcas lo consultan, el pago llega directo a ti.
+        Tus hábitos, tus gustos, tu vida valen dinero. Solo que ese dinero nunca llega a ti. ZIMIL lo cambia.
       </p>
 
       {/* CTAs */}
