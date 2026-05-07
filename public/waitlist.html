@@ -27,68 +27,80 @@
   .pill { padding: 12px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 99px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; }
   .pill:hover { border-color: rgba(255,255,255,0.3); }
   .pill.selected { background: linear-gradient(120deg, #7c3aed, #db2777); border-color: transparent; }
-  .pill.disabled { opacity: 0.4; cursor: not-allowed; }
   .error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #f87171; margin-top: 12px; display: none; }
   .step { display: none; }
   .step.active { display: block; }
   h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
   .sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+  .psico-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 4px; margin-bottom: 16px; }
   .success { text-align: center; padding: 16px 0; display: none; }
   .share-btns { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
   .share-btn { padding: 10px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 99px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
   .share-btn:hover { border-color: rgba(255,255,255,0.3); }
+  .miv-preview { background: rgba(255,255,255,0.04); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; padding: 16px; margin-top: 20px; }
+  .miv-preview-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-bottom: 12px; }
+  .miv-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .miv-bar-label { font-size: 12px; color: rgba(255,255,255,0.5); width: 150px; flex-shrink: 0; }
+  .miv-bar-track { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .miv-bar-fill { height: 4px; border-radius: 2px; background: linear-gradient(90deg, #7c3aed, #db2777); transition: width 0.5s ease; }
+  .miv-bar-val { font-size: 12px; color: rgba(255,255,255,0.4); width: 36px; text-align: right; }
+  .completitud-badge { display: inline-block; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); border-radius: 99px; padding: 4px 14px; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 14px; }
+  .pill-single { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
+  .pill-single .pill { border-radius: 12px; text-align: left; padding: 12px 18px; }
 </style>
 </head>
 <body>
 <div class="card">
   <div id="form-area">
     <div class="progress-labels">
-      <span id="step-label">Paso 1 de 5</span>
-      <span id="pct-label">20%</span>
+      <span id="step-label">Paso 1 de 7</span>
+      <span id="pct-label">14%</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:14%"></div></div>
 
     <div class="step active" id="step-1">
-      <label for="inp-name">¿Cómo te llamas?</label>
-      <input type="text" id="inp-name" name="name" placeholder="Tu nombre" maxlength="80" autocomplete="given-name">
+      <h3>Reserva tu lugar</h3>
+      <div class="sub" style="margin-bottom:16px">30 segundos y listo.</div>
+      <label for="inp-name">&iquest;C&oacute;mo te llamas?</label>
+      <input type="text" id="inp-name" placeholder="Tu nombre" maxlength="80" autocomplete="given-name">
       <label for="inp-email">Tu email</label>
-      <input type="email" id="inp-email" name="email" placeholder="para avisarte cuando abra" maxlength="254" autocomplete="email">
+      <input type="email" id="inp-email" placeholder="para avisarte cuando abra" maxlength="254" autocomplete="email">
       <label for="inp-phone">Tu celular</label>
-      <input type="tel" id="inp-phone" name="phone" placeholder="Ej: 300 123 4567" maxlength="10" autocomplete="tel-national" inputmode="numeric">
-      <div class="hint">Solo Colombia — sin código de país</div>
+      <input type="tel" id="inp-phone" placeholder="Ej: 300 123 4567" maxlength="10" autocomplete="tel-national" inputmode="numeric">
+      <div class="hint">Solo Colombia &mdash; sin c&oacute;digo de pa&iacute;s</div>
       <div id="err-1" class="error"></div>
-      <button type="button" class="btn" id="btn-1">Siguiente →</button>
+      <button type="button" class="btn" id="btn-1">Siguiente &rarr;</button>
     </div>
 
     <div class="step" id="step-2">
-      <button type="button" class="back-btn" id="back-2">← Atrás</button>
-      <h3>¿Cuántos años tienes?</h3>
+      <button type="button" class="back-btn" id="back-2">&larr; Atr&aacute;s</button>
+      <h3>&iquest;Cu&aacute;ntos a&ntilde;os tienes?</h3>
       <div class="pill-grid" id="age-grid">
         <div class="pill" data-val="18-24">18-24</div>
         <div class="pill" data-val="25-32">25-32</div>
         <div class="pill" data-val="33-40">33-40</div>
-        <div class="pill" data-val="Más de 40">Más de 40</div>
+        <div class="pill" data-val="Mas de 40">M&aacute;s de 40</div>
       </div>
     </div>
 
     <div class="step" id="step-3">
-      <button type="button" class="back-btn" id="back-3">← Atrás</button>
-      <h3>¿En qué gastas más cada mes?</h3>
+      <button type="button" class="back-btn" id="back-3">&larr; Atr&aacute;s</button>
+      <h3>&iquest;En qu&eacute; gastas m&aacute;s cada mes?</h3>
       <div class="sub">Escoge hasta 2.</div>
       <div class="pill-grid" id="cat-grid">
-        <div class="pill" data-val="🍔 Comida y delivery">🍔 Comida y delivery</div>
-        <div class="pill" data-val="👗 Ropa y moda">👗 Ropa y moda</div>
-        <div class="pill" data-val="📱 Tech y gadgets">📱 Tech y gadgets</div>
-        <div class="pill" data-val="✈️ Viajes y experiencias">✈️ Viajes y experiencias</div>
-        <div class="pill" data-val="💊 Salud y bienestar">💊 Salud y bienestar</div>
-        <div class="pill" data-val="🎮 Entretenimiento">🎮 Entretenimiento</div>
+        <div class="pill" data-val="Comida y delivery">Comida y delivery</div>
+        <div class="pill" data-val="Ropa y moda">Ropa y moda</div>
+        <div class="pill" data-val="Tech y gadgets">Tech y gadgets</div>
+        <div class="pill" data-val="Viajes y experiencias">Viajes</div>
+        <div class="pill" data-val="Salud y bienestar">Salud y bienestar</div>
+        <div class="pill" data-val="Entretenimiento">Entretenimiento</div>
       </div>
-      <button type="button" class="btn" id="btn-3" disabled>Siguiente →</button>
+      <button type="button" class="btn" id="btn-3" disabled>Siguiente &rarr;</button>
     </div>
 
     <div class="step" id="step-4">
-      <button type="button" class="back-btn" id="back-4">← Atrás</button>
-      <h3>¿Qué apps usas para pagar?</h3>
+      <button type="button" class="back-btn" id="back-4">&larr; Atr&aacute;s</button>
+      <h3>&iquest;Qu&eacute; apps usas para pagar?</h3>
       <div class="sub">Selecciona todas las que apliquen.</div>
       <div class="pill-grid" id="app-grid">
         <div class="pill" data-val="Nequi">Nequi</div>
@@ -96,55 +108,167 @@
         <div class="pill" data-val="Bancolombia">Bancolombia</div>
         <div class="pill" data-val="Rappi">Rappi</div>
         <div class="pill" data-val="MercadoPago">MercadoPago</div>
-        <div class="pill" data-val="Efectivo principalmente">Efectivo principalmente</div>
+        <div class="pill" data-val="Efectivo principalmente">Efectivo</div>
       </div>
-      <button type="button" class="btn" id="btn-4" disabled>Siguiente →</button>
+      <button type="button" class="btn" id="btn-4" disabled>Siguiente &rarr;</button>
     </div>
 
     <div class="step" id="step-5">
-      <button type="button" class="back-btn" id="back-5">← Atrás</button>
-      <h3>¿En qué ciudad estás?</h3>
-      <select id="inp-city" name="city">
+      <button type="button" class="back-btn" id="back-5">&larr; Atr&aacute;s</button>
+      <h3>&iquest;C&oacute;mo decides cuando compras?</h3>
+      <div class="psico-sub">2 preguntas r&aacute;pidas &mdash; esto define tu gemelo digital.</div>
+      <label style="margin-top:0">Cuando algo te gusta pero est&aacute; m&aacute;s caro de lo esperado...</label>
+      <div class="pill-single" id="precio-grid">
+        <div class="pill" data-val="0.1">Lo compro igual si me gusta de verdad</div>
+        <div class="pill" data-val="0.5">Espero una promo o busco d&oacute;nde est&aacute; m&aacute;s barato</div>
+        <div class="pill" data-val="0.9">Lo descarto y busco una alternativa m&aacute;s econ&oacute;mica</div>
+      </div>
+      <label>Con marcas que usas seguido, &iquest;qu&eacute; tan f&aacute;cil cambias?</label>
+      <div class="pill-single" id="lealtad-grid">
+        <div class="pill" data-val="0.9">Casi nunca &mdash; si algo me funciona, me quedo</div>
+        <div class="pill" data-val="0.5">Cambio si la nueva opci&oacute;n es notablemente mejor</div>
+        <div class="pill" data-val="0.1">Siempre estoy probando cosas nuevas</div>
+      </div>
+      <button type="button" class="btn" id="btn-5" disabled>Siguiente &rarr;</button>
+    </div>
+
+    <div class="step" id="step-6">
+      <button type="button" class="back-btn" id="back-6">&larr; Atr&aacute;s</button>
+      <h3>Dos preguntas m&aacute;s</h3>
+      <div class="psico-sub">Ya casi &mdash; esto completa tu gemelo.</div>
+      <label style="margin-top:0">Cuando gastas dinero, &iquest;en qu&eacute; piensas m&aacute;s?</label>
+      <div class="pill-single" id="orient-grid">
+        <div class="pill" data-val="Presente">En disfrutarlo ahora mismo</div>
+        <div class="pill" data-val="Mixta">Mezclo &mdash; depende de qu&eacute; estoy comprando</div>
+        <div class="pill" data-val="Futuro">En si vale la pena a largo plazo</div>
+      </div>
+      <label>Con apps y tecnolog&iacute;a nueva, &iquest;c&oacute;mo eres?</label>
+      <div class="pill-single" id="tech-grid">
+        <div class="pill" data-val="0.9">De los primeros en probarla</div>
+        <div class="pill" data-val="0.5">La adopto cuando ya est&aacute; probada</div>
+        <div class="pill" data-val="0.2">Prefiero quedarme con lo que ya conozco</div>
+      </div>
+      <button type="button" class="btn" id="btn-6" disabled>Ver mi gemelo &rarr;</button>
+    </div>
+
+    <div class="step" id="step-7">
+      <button type="button" class="back-btn" id="back-7">&larr; Atr&aacute;s</button>
+      <h3>&iexcl;Ya casi!</h3>
+      <div class="psico-sub">Tu gemelo digital est&aacute; listo. Confirma tu ciudad y &uacute;nete.</div>
+      <div class="miv-preview">
+        <div class="miv-preview-title">Tu gemelo digital &mdash; vista previa</div>
+        <div class="completitud-badge">Completitud: 18% &mdash; el resto lo construye tu actividad</div>
+        <div class="miv-bar-row">
+          <div class="miv-bar-label">Sensibilidad al precio</div>
+          <div class="miv-bar-track"><div class="miv-bar-fill" id="bar-precio" style="width:0%"></div></div>
+          <div class="miv-bar-val" id="val-precio">-</div>
+        </div>
+        <div class="miv-bar-row">
+          <div class="miv-bar-label">Lealtad de marca</div>
+          <div class="miv-bar-track"><div class="miv-bar-fill" id="bar-lealtad" style="width:0%"></div></div>
+          <div class="miv-bar-val" id="val-lealtad">-</div>
+        </div>
+        <div class="miv-bar-row">
+          <div class="miv-bar-label">Adopci&oacute;n tecnol&oacute;gica</div>
+          <div class="miv-bar-track"><div class="miv-bar-fill" id="bar-tech" style="width:0%"></div></div>
+          <div class="miv-bar-val" id="val-tech">-</div>
+        </div>
+        <div class="miv-bar-row">
+          <div class="miv-bar-label">Orientaci&oacute;n temporal</div>
+          <div class="miv-bar-track"><div class="miv-bar-fill" id="bar-orient" style="width:50%"></div></div>
+          <div class="miv-bar-val" id="val-orient">-</div>
+        </div>
+      </div>
+      <label for="inp-city" style="margin-top:20px">&iquest;En qu&eacute; ciudad est&aacute;s?</label>
+      <select id="inp-city">
         <option value="" disabled selected>Selecciona tu ciudad</option>
-        <option>Bogotá</option><option>Medellín</option><option>Cali</option>
+        <option>Bogot&aacute;</option><option>Medell&iacute;n</option><option>Cali</option>
         <option>Barranquilla</option><option>Cartagena</option><option>Bucaramanga</option>
         <option>Pereira</option><option>Manizales</option><option>Santa Marta</option><option>Otra</option>
       </select>
-      <div id="err-5" class="error"></div>
-      <button type="button" class="btn" id="btn-submit">Quiero mi lugar en ZIMIL 🚀</button>
+      <div id="err-7" class="error"></div>
+      <button type="button" class="btn" id="btn-submit">Quiero mi lugar en ZIMIL &#x1F680;</button>
     </div>
   </div>
 
   <div class="success" id="success-area">
-    <div style="font-size:64px;margin-bottom:16px">✅</div>
-    <h3 id="success-title">¡Estás dentro!</h3>
+    <div style="font-size:64px;margin-bottom:16px">&#x2705;</div>
+    <h3 id="success-title">&iexcl;Est&aacute;s dentro!</h3>
     <p style="color:rgba(255,255,255,0.5);margin-top:12px;font-size:15px;line-height:1.6" id="success-msg">
-      Te avisamos por email cuando tu acceso esté listo. Cuéntale a alguien — entre más personas en la lista, antes abrimos.
+      Te avisamos por email cuando tu acceso est&eacute; listo. Cu&eacute;ntale a alguien &mdash; entre m&aacute;s personas en la lista, antes abrimos.
     </p>
     <div class="share-btns">
-      <a id="wa-btn" href="#" target="_blank" class="share-btn">💬 Compartir en WhatsApp</a>
-      <button type="button" class="share-btn" id="copy-btn">🔗 Copiar enlace</button>
+      <a id="wa-btn" href="#" target="_blank" class="share-btn">&#x1F4AC; Compartir en WhatsApp</a>
+      <button type="button" class="share-btn" id="copy-btn">&#x1F517; Copiar enlace</button>
     </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://lujzxzvezsuevggddsme.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Mqk1xwc0Rga0EXNCoFxhYA_5Y7287A_';
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-let currentStep = 1;
-let ageRange = '';
-let categories = [];
-let apps = [];
+var SUPABASE_URL = 'https://lujzxzvezsuevggddsme.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_Mqk1xwc0Rga0EXNCoFxhYA_5Y7287A_';
+var db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+var TOTAL_STEPS = 7;
+var currentStep = 1;
+var ageRange = '';
+var categories = [];
+var apps = [];
+var sensibilidadPrecio = null;
+var lealtadMarca = null;
+var orientacion = null;
+var adopcionTech = null;
 
 function goTo(n) {
   document.getElementById('step-' + currentStep).classList.remove('active');
   currentStep = n;
   document.getElementById('step-' + n).classList.add('active');
-  document.getElementById('step-label').textContent = 'Paso ' + n + ' de 5';
-  document.getElementById('pct-label').textContent = (n * 20) + '%';
-  document.getElementById('progress-fill').style.width = (n * 20) + '%';
+  document.getElementById('step-label').textContent = 'Paso ' + n + ' de ' + TOTAL_STEPS;
+  var pct = Math.round((n / TOTAL_STEPS) * 100);
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  if (n === 7) renderMivPreview();
+}
+
+function inferSegmento() {
+  var t = parseFloat(adopcionTech || '0');
+  if ((ageRange === '18-24' || ageRange === '25-32') && t >= 0.5) {
+    if (categories.indexOf('Viajes y experiencias') > -1) return 'Digital Nomad';
+    if (categories.indexOf('Tech y gadgets') > -1) return 'Tech Early Adopter';
+    return 'Digital-first Millennial';
+  }
+  if (ageRange === '33-40') return 'Established Professional';
+  if (ageRange === 'Mas de 40') return 'Value-driven Consumer';
+  return 'Young Explorer';
+}
+
+function buildMIV(city) {
+  return {
+    perfil: inferSegmento(),
+    sensibilidad_precio: parseFloat(sensibilidadPrecio),
+    lealtad_marca: parseFloat(lealtadMarca),
+    adopcion_tecnologica: parseFloat(adopcionTech),
+    orientacion: orientacion,
+    categoria_top: categories,
+    segmento: inferSegmento(),
+    fuentes_activas: ['onboarding'],
+    completitud: 0.18,
+    meta: { age_range: ageRange, payment_apps: apps, city: city || '' }
+  };
+}
+
+function renderMivPreview() {
+  var p = parseFloat(sensibilidadPrecio || '0');
+  var l = parseFloat(lealtadMarca || '0');
+  var t = parseFloat(adopcionTech || '0');
+  document.getElementById('bar-precio').style.width = Math.round(p * 100) + '%';
+  document.getElementById('val-precio').textContent = p.toFixed(1);
+  document.getElementById('bar-lealtad').style.width = Math.round(l * 100) + '%';
+  document.getElementById('val-lealtad').textContent = l.toFixed(1);
+  document.getElementById('bar-tech').style.width = Math.round(t * 100) + '%';
+  document.getElementById('val-tech').textContent = t.toFixed(1);
+  var orientPct = { 'Presente': '33', 'Mixta': '55', 'Futuro': '90' };
+  document.getElementById('bar-orient').style.width = (orientPct[orientacion] || '50') + '%';
+  document.getElementById('val-orient').textContent = orientacion || '-';
 }
 
 document.getElementById('btn-1').addEventListener('click', function() {
@@ -152,64 +276,82 @@ document.getElementById('btn-1').addEventListener('click', function() {
   var email = document.getElementById('inp-email').value.trim();
   var phone = document.getElementById('inp-phone').value.replace(/\D/g,'');
   var err = document.getElementById('err-1');
-  if (!name) { err.textContent = 'Cuéntanos tu nombre.'; err.style.display='block'; return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Escribe un email válido.'; err.style.display='block'; return; }
-  if (!/^\d{10}$/.test(phone)) { err.textContent = 'Escribe un número de celular válido (10 dígitos)'; err.style.display='block'; return; }
-  err.style.display='none';
-  goTo(2);
+  if (!name) { err.textContent = 'Cuentanos tu nombre.'; err.style.display='block'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Escribe un email valido.'; err.style.display='block'; return; }
+  if (!/^\d{10}$/.test(phone)) { err.textContent = 'Escribe un numero de celular valido (10 digitos).'; err.style.display='block'; return; }
+  err.style.display='none'; goTo(2);
 });
 
 document.getElementById('back-2').addEventListener('click', function() { goTo(1); });
 document.getElementById('back-3').addEventListener('click', function() { goTo(2); });
 document.getElementById('back-4').addEventListener('click', function() { goTo(3); });
 document.getElementById('back-5').addEventListener('click', function() { goTo(4); });
+document.getElementById('back-6').addEventListener('click', function() { goTo(5); });
+document.getElementById('back-7').addEventListener('click', function() { goTo(6); });
 
 document.getElementById('age-grid').addEventListener('click', function(e) {
-  var pill = e.target.closest('.pill');
-  if (!pill) return;
+  var pill = e.target.closest('.pill'); if (!pill) return;
   document.querySelectorAll('#age-grid .pill').forEach(function(p) { p.classList.remove('selected'); });
-  pill.classList.add('selected');
-  ageRange = pill.dataset.val;
+  pill.classList.add('selected'); ageRange = pill.dataset.val;
   setTimeout(function() { goTo(3); }, 200);
 });
 
 document.getElementById('cat-grid').addEventListener('click', function(e) {
-  var pill = e.target.closest('.pill');
-  if (!pill) return;
+  var pill = e.target.closest('.pill'); if (!pill) return;
   if (pill.classList.contains('selected')) {
     pill.classList.remove('selected');
     categories = categories.filter(function(c) { return c !== pill.dataset.val; });
   } else {
     if (categories.length >= 2) return;
-    pill.classList.add('selected');
-    categories.push(pill.dataset.val);
+    pill.classList.add('selected'); categories.push(pill.dataset.val);
   }
   document.getElementById('btn-3').disabled = categories.length === 0;
 });
-
 document.getElementById('btn-3').addEventListener('click', function() { goTo(4); });
 
 document.getElementById('app-grid').addEventListener('click', function(e) {
-  var pill = e.target.closest('.pill');
-  if (!pill) return;
+  var pill = e.target.closest('.pill'); if (!pill) return;
   if (pill.classList.contains('selected')) {
     pill.classList.remove('selected');
     apps = apps.filter(function(a) { return a !== pill.dataset.val; });
-  } else {
-    pill.classList.add('selected');
-    apps.push(pill.dataset.val);
-  }
+  } else { pill.classList.add('selected'); apps.push(pill.dataset.val); }
   document.getElementById('btn-4').disabled = apps.length === 0;
 });
-
 document.getElementById('btn-4').addEventListener('click', function() { goTo(5); });
+
+document.getElementById('precio-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill'); if (!pill) return;
+  document.querySelectorAll('#precio-grid .pill').forEach(function(p) { p.classList.remove('selected'); });
+  pill.classList.add('selected'); sensibilidadPrecio = pill.dataset.val; checkBtn5();
+});
+document.getElementById('lealtad-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill'); if (!pill) return;
+  document.querySelectorAll('#lealtad-grid .pill').forEach(function(p) { p.classList.remove('selected'); });
+  pill.classList.add('selected'); lealtadMarca = pill.dataset.val; checkBtn5();
+});
+function checkBtn5() { document.getElementById('btn-5').disabled = !(sensibilidadPrecio && lealtadMarca); }
+document.getElementById('btn-5').addEventListener('click', function() { goTo(6); });
+
+document.getElementById('orient-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill'); if (!pill) return;
+  document.querySelectorAll('#orient-grid .pill').forEach(function(p) { p.classList.remove('selected'); });
+  pill.classList.add('selected'); orientacion = pill.dataset.val; checkBtn6();
+});
+document.getElementById('tech-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill'); if (!pill) return;
+  document.querySelectorAll('#tech-grid .pill').forEach(function(p) { p.classList.remove('selected'); });
+  pill.classList.add('selected'); adopcionTech = pill.dataset.val; checkBtn6();
+});
+function checkBtn6() { document.getElementById('btn-6').disabled = !(orientacion && adopcionTech); }
+document.getElementById('btn-6').addEventListener('click', function() { goTo(7); });
 
 document.getElementById('btn-submit').addEventListener('click', async function() {
   var city = document.getElementById('inp-city').value;
-  var err = document.getElementById('err-5');
+  var err = document.getElementById('err-7');
   if (!city) { err.textContent = 'Escoge tu ciudad.'; err.style.display='block'; return; }
   err.style.display='none';
   this.disabled = true; this.textContent = 'Reservando...';
+  var miv = buildMIV(city);
   var result = await db.from('waitlist').insert({
     name: document.getElementById('inp-name').value.trim(),
     email: document.getElementById('inp-email').value.trim(),
@@ -217,17 +359,19 @@ document.getElementById('btn-submit').addEventListener('click', async function()
     age_range: ageRange,
     top_categories: categories.join(', '),
     payment_apps: apps.join(', '),
-    city: city, type: 'user'
+    city: city,
+    type: 'user',
+    miv: miv
   });
   if (result.error && result.error.code === '23505') {
-    document.getElementById('success-title').textContent = 'Ya estás en la lista 🎉';
-    document.getElementById('success-msg').textContent = 'Te avisamos pronto en cuanto tu acceso esté listo.';
+    document.getElementById('success-title').textContent = 'Ya estas en la lista!';
+    document.getElementById('success-msg').textContent = 'Te avisamos pronto en cuanto tu acceso este listo.';
   } else if (result.error) {
-    err.textContent = 'Algo falló. Intenta de nuevo.'; err.style.display='block';
-    this.disabled=false; this.textContent='Quiero mi lugar en ZIMIL 🚀'; return;
+    err.textContent = 'Algo fallo. Intenta de nuevo.'; err.style.display='block';
+    this.disabled=false; this.textContent='Quiero mi lugar en ZIMIL'; return;
   }
   var shareUrl = 'https://zimil-vibes-launch.vercel.app/';
-  var shareText = 'Acabo de reservar mi lugar en ZIMIL — una IA que te paga cuando las marcas consultan tu perfil. Únete: ' + shareUrl;
+  var shareText = 'Acabo de reservar mi lugar en ZIMIL - una IA que te paga cuando las marcas consultan tu perfil. Unete: ' + shareUrl;
   document.getElementById('wa-btn').href = 'https://wa.me/?text=' + encodeURIComponent(shareText);
   document.getElementById('form-area').style.display='none';
   document.getElementById('success-area').style.display='block';
@@ -235,8 +379,8 @@ document.getElementById('btn-submit').addEventListener('click', async function()
 
 document.getElementById('copy-btn').addEventListener('click', function() {
   navigator.clipboard.writeText('https://zimil-vibes-launch.vercel.app/').then(function() {
-    document.getElementById('copy-btn').textContent = '✅ ¡Copiado!';
-    setTimeout(function() { document.getElementById('copy-btn').textContent = '🔗 Copiar enlace'; }, 2000);
+    document.getElementById('copy-btn').textContent = 'Copiado!';
+    setTimeout(function() { document.getElementById('copy-btn').textContent = 'Copiar enlace'; }, 2000);
   });
 });
 </script>
