@@ -22,7 +22,7 @@ export function Header() {
         </a>
 
         <Button asChild size="sm" className="rounded-full px-5 font-semibold sm:size-default sm:px-6">
-          <a href="#waitlist" onClick={handleCtaClick}>
+          <a href="/waitlist.html" onClick={handleCtaClick}>
             Quiero entrar
           </a>
         </Button>

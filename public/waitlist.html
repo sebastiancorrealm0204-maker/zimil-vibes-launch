@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de espera ZIMIL</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0D0D18; color: white; padding: 32px 20px; min-height: 100vh; }
+  .card { max-width: 520px; margin: 0 auto; background: rgba(255,255,255,0.03); border: 1px solid rgba(139,92,246,0.3); border-radius: 24px; padding: 32px; box-shadow: 0 0 40px -8px rgba(139,92,246,0.4); }
+  .progress-bar { background: rgba(255,255,255,0.08); border-radius: 99px; height: 8px; margin: 12px 0 24px; }
+  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #7c3aed, #db2777); transition: width 0.4s ease; }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); }
+  label { display: block; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 8px; margin-top: 16px; }
+  input, select { width: 100%; height: 48px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; font-size: 16px; padding: 0 16px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+  input:focus, select:focus { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124,58,237,0.3); }
+  input::placeholder { color: rgba(255,255,255,0.3); }
+  select option { background: #1a1a2e; color: white; }
+  .hint { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 6px; }
+  .btn { width: 100%; padding: 16px; border: none; border-radius: 99px; background: linear-gradient(135deg, #7c3aed, #db2777); color: white; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: opacity 0.2s; }
+  .btn:hover { opacity: 0.9; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .back-btn { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 14px; cursor: pointer; padding: 0; margin-bottom: 16px; }
+  .back-btn:hover { color: white; }
+  .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .pill { padding: 12px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 99px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; cursor: pointer; text-align: center; transition: all 0.2s; user-select: none; }
+  .pill:hover { border-color: rgba(255,255,255,0.3); }
+  .pill.selected { background: linear-gradient(120deg, #7c3aed, #db2777); border-color: transparent; }
+  .pill.disabled { opacity: 0.4; cursor: not-allowed; }
+  .error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #f87171; margin-top: 12px; display: none; }
+  .step { display: none; }
+  .step.active { display: block; }
+  h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+  .success { text-align: center; padding: 16px 0; display: none; }
+  .share-btns { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+  .share-btn { padding: 10px 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 99px; background: rgba(255,255,255,0.05); color: white; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .share-btn:hover { border-color: rgba(255,255,255,0.3); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="form-area">
+    <div class="progress-labels">
+      <span id="step-label">Paso 1 de 5</span>
+      <span id="pct-label">20%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
+
+    <div class="step active" id="step-1">
+      <label for="inp-name">¿Cómo te llamas?</label>
+      <input type="text" id="inp-name" name="name" placeholder="Tu nombre" maxlength="80" autocomplete="given-name">
+      <label for="inp-email">Tu email</label>
+      <input type="email" id="inp-email" name="email" placeholder="para avisarte cuando abra" maxlength="254" autocomplete="email">
+      <label for="inp-phone">Tu celular</label>
+      <input type="tel" id="inp-phone" name="phone" placeholder="Ej: 300 123 4567" maxlength="10" autocomplete="tel-national" inputmode="numeric">
+      <div class="hint">Solo Colombia — sin código de país</div>
+      <div id="err-1" class="error"></div>
+      <button type="button" class="btn" id="btn-1">Siguiente →</button>
+    </div>
+
+    <div class="step" id="step-2">
+      <button type="button" class="back-btn" id="back-2">← Atrás</button>
+      <h3>¿Cuántos años tienes?</h3>
+      <div class="pill-grid" id="age-grid">
+        <div class="pill" data-val="18-24">18-24</div>
+        <div class="pill" data-val="25-32">25-32</div>
+        <div class="pill" data-val="33-40">33-40</div>
+        <div class="pill" data-val="Más de 40">Más de 40</div>
+      </div>
+    </div>
+
+    <div class="step" id="step-3">
+      <button type="button" class="back-btn" id="back-3">← Atrás</button>
+      <h3>¿En qué gastas más cada mes?</h3>
+      <div class="sub">Escoge hasta 2.</div>
+      <div class="pill-grid" id="cat-grid">
+        <div class="pill" data-val="🍔 Comida y delivery">🍔 Comida y delivery</div>
+        <div class="pill" data-val="👗 Ropa y moda">👗 Ropa y moda</div>
+        <div class="pill" data-val="📱 Tech y gadgets">📱 Tech y gadgets</div>
+        <div class="pill" data-val="✈️ Viajes y experiencias">✈️ Viajes y experiencias</div>
+        <div class="pill" data-val="💊 Salud y bienestar">💊 Salud y bienestar</div>
+        <div class="pill" data-val="🎮 Entretenimiento">🎮 Entretenimiento</div>
+      </div>
+      <button type="button" class="btn" id="btn-3" disabled>Siguiente →</button>
+    </div>
+
+    <div class="step" id="step-4">
+      <button type="button" class="back-btn" id="back-4">← Atrás</button>
+      <h3>¿Qué apps usas para pagar?</h3>
+      <div class="sub">Selecciona todas las que apliquen.</div>
+      <div class="pill-grid" id="app-grid">
+        <div class="pill" data-val="Nequi">Nequi</div>
+        <div class="pill" data-val="Daviplata">Daviplata</div>
+        <div class="pill" data-val="Bancolombia">Bancolombia</div>
+        <div class="pill" data-val="Rappi">Rappi</div>
+        <div class="pill" data-val="MercadoPago">MercadoPago</div>
+        <div class="pill" data-val="Efectivo principalmente">Efectivo principalmente</div>
+      </div>
+      <button type="button" class="btn" id="btn-4" disabled>Siguiente →</button>
+    </div>
+
+    <div class="step" id="step-5">
+      <button type="button" class="back-btn" id="back-5">← Atrás</button>
+      <h3>¿En qué ciudad estás?</h3>
+      <select id="inp-city" name="city">
+        <option value="" disabled selected>Selecciona tu ciudad</option>
+        <option>Bogotá</option><option>Medellín</option><option>Cali</option>
+        <option>Barranquilla</option><option>Cartagena</option><option>Bucaramanga</option>
+        <option>Pereira</option><option>Manizales</option><option>Santa Marta</option><option>Otra</option>
+      </select>
+      <div id="err-5" class="error"></div>
+      <button type="button" class="btn" id="btn-submit">Quiero mi lugar en ZIMIL 🚀</button>
+    </div>
+  </div>
+
+  <div class="success" id="success-area">
+    <div style="font-size:64px;margin-bottom:16px">✅</div>
+    <h3 id="success-title">¡Estás dentro!</h3>
+    <p style="color:rgba(255,255,255,0.5);margin-top:12px;font-size:15px;line-height:1.6" id="success-msg">
+      Te avisamos por email cuando tu acceso esté listo. Cuéntale a alguien — entre más personas en la lista, antes abrimos.
+    </p>
+    <div class="share-btns">
+      <a id="wa-btn" href="#" target="_blank" class="share-btn">💬 Compartir en WhatsApp</a>
+      <button type="button" class="share-btn" id="copy-btn">🔗 Copiar enlace</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://lujzxzvezsuevggddsme.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Mqk1xwc0Rga0EXNCoFxhYA_5Y7287A_';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentStep = 1;
+let ageRange = '';
+let categories = [];
+let apps = [];
+
+function goTo(n) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step-' + n).classList.add('active');
+  document.getElementById('step-label').textContent = 'Paso ' + n + ' de 5';
+  document.getElementById('pct-label').textContent = (n * 20) + '%';
+  document.getElementById('progress-fill').style.width = (n * 20) + '%';
+}
+
+document.getElementById('btn-1').addEventListener('click', function() {
+  var name = document.getElementById('inp-name').value.trim();
+  var email = document.getElementById('inp-email').value.trim();
+  var phone = document.getElementById('inp-phone').value.replace(/\D/g,'');
+  var err = document.getElementById('err-1');
+  if (!name) { err.textContent = 'Cuéntanos tu nombre.'; err.style.display='block'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Escribe un email válido.'; err.style.display='block'; return; }
+  if (!/^\d{10}$/.test(phone)) { err.textContent = 'Escribe un número de celular válido (10 dígitos)'; err.style.display='block'; return; }
+  err.style.display='none';
+  goTo(2);
+});
+
+document.getElementById('back-2').addEventListener('click', function() { goTo(1); });
+document.getElementById('back-3').addEventListener('click', function() { goTo(2); });
+document.getElementById('back-4').addEventListener('click', function() { goTo(3); });
+document.getElementById('back-5').addEventListener('click', function() { goTo(4); });
+
+document.getElementById('age-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill');
+  if (!pill) return;
+  document.querySelectorAll('#age-grid .pill').forEach(function(p) { p.classList.remove('selected'); });
+  pill.classList.add('selected');
+  ageRange = pill.dataset.val;
+  setTimeout(function() { goTo(3); }, 200);
+});
+
+document.getElementById('cat-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill');
+  if (!pill) return;
+  if (pill.classList.contains('selected')) {
+    pill.classList.remove('selected');
+    categories = categories.filter(function(c) { return c !== pill.dataset.val; });
+  } else {
+    if (categories.length >= 2) return;
+    pill.classList.add('selected');
+    categories.push(pill.dataset.val);
+  }
+  document.getElementById('btn-3').disabled = categories.length === 0;
+});
+
+document.getElementById('btn-3').addEventListener('click', function() { goTo(4); });
+
+document.getElementById('app-grid').addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill');
+  if (!pill) return;
+  if (pill.classList.contains('selected')) {
+    pill.classList.remove('selected');
+    apps = apps.filter(function(a) { return a !== pill.dataset.val; });
+  } else {
+    pill.classList.add('selected');
+    apps.push(pill.dataset.val);
+  }
+  document.getElementById('btn-4').disabled = apps.length === 0;
+});
+
+document.getElementById('btn-4').addEventListener('click', function() { goTo(5); });
+
+document.getElementById('btn-submit').addEventListener('click', async function() {
+  var city = document.getElementById('inp-city').value;
+  var err = document.getElementById('err-5');
+  if (!city) { err.textContent = 'Escoge tu ciudad.'; err.style.display='block'; return; }
+  err.style.display='none';
+  this.disabled = true; this.textContent = 'Reservando...';
+  var result = await db.from('waitlist').insert({
+    name: document.getElementById('inp-name').value.trim(),
+    email: document.getElementById('inp-email').value.trim(),
+    phone: document.getElementById('inp-phone').value.replace(/\D/g,''),
+    age_range: ageRange,
+    top_categories: categories.join(', '),
+    payment_apps: apps.join(', '),
+    city: city, type: 'user'
+  });
+  if (result.error && result.error.code === '23505') {
+    document.getElementById('success-title').textContent = 'Ya estás en la lista 🎉';
+    document.getElementById('success-msg').textContent = 'Te avisamos pronto en cuanto tu acceso esté listo.';
+  } else if (result.error) {
+    err.textContent = 'Algo falló. Intenta de nuevo.'; err.style.display='block';
+    this.disabled=false; this.textContent='Quiero mi lugar en ZIMIL 🚀'; return;
+  }
+  var shareUrl = 'https://zimil-vibes-launch.vercel.app/';
+  var shareText = 'Acabo de reservar mi lugar en ZIMIL — una IA que te paga cuando las marcas consultan tu perfil. Únete: ' + shareUrl;
+  document.getElementById('wa-btn').href = 'https://wa.me/?text=' + encodeURIComponent(shareText);
+  document.getElementById('form-area').style.display='none';
+  document.getElementById('success-area').style.display='block';
+});
+
+document.getElementById('copy-btn').addEventListener('click', function() {
+  navigator.clipboard.writeText('https://zimil-vibes-launch.vercel.app/').then(function() {
+    document.getElementById('copy-btn').textContent = '✅ ¡Copiado!';
+    setTimeout(function() { document.getElementById('copy-btn').textContent = '🔗 Copiar enlace'; }, 2000);
+  });
+});
+</script>
+</body>
+</html>

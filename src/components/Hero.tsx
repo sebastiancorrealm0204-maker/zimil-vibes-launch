@@ -56,7 +56,7 @@ export function Hero() {
           {/* CTAs */}
           <div className="mt-9 flex flex-col items-center gap-4 lg:items-start">
             <Button asChild variant="hero" size="xl">
-              <a href="#waitlist" onClick={scrollToId("waitlist")}>
+              <a href="/waitlist.html" onClick={scrollToId("waitlist")}>
                 Quiero mi lugar
               </a>
             </Button>
