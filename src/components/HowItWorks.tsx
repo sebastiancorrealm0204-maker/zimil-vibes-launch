@@ -1,292 +1,124 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, Mail, Instagram, Camera } from "lucide-react";
 
-type Step = {
-  icon: typeof MessageCircle;
-  title: string;
-  body: string;
-  badge: string;
-  badgeGradient?: boolean;
-};
-
-const STEPS: Step[] = [
-  {
-    icon: MessageCircle,
-    title: "Algunas preguntas rápidas",
-    body: "Cuéntanos un poco sobre ti — tus gustos, hábitos y estilo de vida. Solo toma un momento.",
-    badge: "Gemelo al 20%",
-  },
-  {
-    icon: Mail,
-    title: "Conecta Gmail",
-    body: "Solo leemos emails de compras — confirmaciones, recibos, pedidos. Nunca tus conversaciones personales.",
-    badge: "Gemelo al 65%",
-  },
-  {
-    icon: Instagram,
-    title: "Sube tu ZIP de Instagram",
-    body: "Descárgalo en 2 minutos desde Configuración de Instagram. ZIMIL extrae tus intereses y estilo de vida — nada más.",
-    badge: "Gemelo al 90%",
-  },
-  {
-    icon: Camera,
-    title: "Foto de tus recibos",
-    body: "¿Compraste algo en efectivo? Fotografía el recibo. 3 segundos. Captura todo lo que las apps no ven.",
-    badge: "Gemelo al 100% 🔥",
-    badgeGradient: true,
-  },
-];
-
-type Card = {
-  n: string;
-  title: string;
-  body: string;
-  border: string;
-  accent: string;
-  isGradient?: boolean;
-};
-
-const CARDS: Card[] = [
+const HOW_STEPS = [
   {
     n: "01",
-    title: "ZIMIL construye tu Gemelo Digital",
-    body: "Una IA que aprende cómo gastas, qué te gusta y cómo decides — sin guardar tus datos privados. Solo los patrones.",
-    border: "border-l-primary",
-    accent: "var(--color-primary)",
+    title: "ZIMIL construye tu gemelo digital",
+    body: "Una IA aprende cómo gastas, qué te gusta y cómo decides — sin guardar tus datos privados. Solo los patrones.",
   },
   {
     n: "02",
-    title: "Las marcas le hacen preguntas a tu gemelo",
-    body: "Nike, Rappi, un banco, una app — cualquier marca puede preguntarle a ZIMIL: «¿este tipo de persona compraría esto?» Tu gemelo responde. Tú no haces nada.",
-    border: "border-l-accent",
-    accent: "var(--color-accent)",
+    title: "Las marcas consultan tu gemelo",
+    body: "Cualquier marca puede preguntarle a ZIMIL si un perfil como el tuyo compraría algo. Tu gemelo responde. Tú no haces nada.",
   },
   {
     n: "03",
     title: "Tú recibes el pago",
-    body: "Cada vez que una marca consulta tu gemelo, el pago llega directo a tu cuenta. Automático. Sin tramitar nada.",
-    border: "",
-    accent: "linear-gradient(180deg, var(--color-primary), var(--color-accent))",
-    isGradient: true,
+    body: "Cada consulta genera un pago automático directo a tu cuenta. Sin tramitar nada, sin intermediarios.",
   },
 ];
 
-function useInViewSequential(count: number) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState<boolean[]>(() => Array(count).fill(false));
+const BUILD_STEPS = [
+  {
+    step: "1",
+    title: "Algunas preguntas rápidas",
+    body: "Cuéntanos tus gustos, hábitos y estilo de vida. Solo toma 30 segundos.",
+    badge: "Gemelo al 20%",
+  },
+  {
+    step: "2",
+    title: "Conecta tu correo",
+    body: "Solo leemos emails de compras — confirmaciones y recibos. Nunca conversaciones personales.",
+    badge: "Gemelo al 65%",
+  },
+  {
+    step: "3",
+    title: "Sube tu archivo de redes sociales",
+    body: "Descárgalo desde la configuración de tu red. ZIMIL extrae tus intereses y estilo de vida — nada más.",
+    badge: "Gemelo al 90%",
+  },
+  {
+    step: "4",
+    title: "Fotografía tus recibos",
+    body: "¿Compraste en efectivo? 3 segundos y el recibo queda registrado. Captura lo que las apps no ven.",
+    badge: "Gemelo al 100% 🔥",
+  },
+];
 
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const root = containerRef.current;
-    if (!root) return;
-    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-step-index]"));
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const idx = Number((entry.target as HTMLElement).dataset.stepIndex);
-          // stagger reveal slightly so they cascade
-          setTimeout(() => {
-            setVisible((prev) => {
-              if (prev[idx]) return prev;
-              const next = [...prev];
-              next[idx] = true;
-              return next;
-            });
-          }, idx * 120);
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.25, rootMargin: "0px 0px -10% 0px" },
-    );
-
-    items.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.15 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
   }, []);
-
-  return { containerRef, visible };
+  return { ref, visible };
 }
 
 export function HowItWorks() {
-  const { containerRef, visible } = useInViewSequential(STEPS.length);
+  const how = useReveal();
+  const build = useReveal();
 
   return (
     <div id="how-it-works">
-      {/* SECTION 1 — What is ZIMIL? */}
-      <section
-        aria-label="¿Qué es ZIMIL exactamente?"
-        className="relative w-full"
-        style={{ backgroundColor: "#0D0D18" }}
-      >
-        <div className="mx-auto w-full max-w-5xl px-5 py-20 sm:px-8 sm:py-28">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            ¿Qué es ZIMIL exactamente?
-          </p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-center font-display text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            Tu IA personal que trabaja{" "}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(120deg, var(--color-primary-glow), var(--color-accent))",
-              }}
-            >
-              mientras tú haces tu vida
-            </span>
+      {/* Qué es ZIMIL */}
+      <section className="w-full" style={{ backgroundColor: "#0D0D18" }}>
+        <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">Qué es ZIMIL</p>
+          <h2 className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-16">
+            Una IA que trabaja por ti mientras haces tu vida
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-base leading-relaxed text-muted-foreground sm:text-lg">
-            No vendes tus datos. No compartes contraseñas. No instalas nada
-            raro. Solo conectas lo que quieres y tu gemelo empieza a generar
-            valor por ti.
-          </p>
 
-          <div className="mt-14 space-y-5">
-            {CARDS.map((card) => (
-              <article
-                key={card.n}
-                className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-card/60 p-6 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-white/20 hover:shadow-[0_20px_60px_-20px_rgba(124,58,237,0.5)] sm:p-8 ${
-                  card.isGradient ? "" : `border-l-4 ${card.border}`
-                }`}
+          <div ref={how.ref} className="space-y-4">
+            {HOW_STEPS.map((s, i) => (
+              <div
+                key={s.n}
+                className="flex gap-6 rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-all duration-700"
+                style={{ opacity: how.visible ? 1 : 0, transform: how.visible ? "none" : "translateY(16px)", transitionDelay: `${i * 100}ms` }}
               >
-                {card.isGradient && (
-                  <span
-                    aria-hidden
-                    className="absolute left-0 top-0 h-full w-1"
-                    style={{ background: card.accent }}
-                  />
-                )}
-                <div className="grid items-start gap-5 sm:grid-cols-[auto_1fr] sm:gap-8">
-                  <span
-                    className="font-display text-5xl font-bold leading-none sm:text-6xl"
-                    style={{
-                      backgroundImage: card.isGradient
-                        ? "linear-gradient(135deg, var(--color-primary-glow), var(--color-accent))"
-                        : `linear-gradient(180deg, ${card.accent}, color-mix(in oklab, ${card.accent} 60%, transparent))`,
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                    }}
-                  >
-                    {card.n}
-                  </span>
-                  <div>
-                    <h3 className="font-display text-xl font-semibold text-foreground sm:text-2xl">
-                      {card.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                      {card.body}
-                    </p>
-                  </div>
+                <span className="font-display text-3xl font-bold text-white/10 leading-none shrink-0 w-10">{s.n}</span>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">{s.title}</h3>
+                  <p className="text-sm text-white/40 leading-relaxed">{s.body}</p>
                 </div>
-              </article>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 2 — Build your twin in 4 steps */}
-      <section
-        aria-label="Construye tu gemelo en 4 pasos"
-        className="relative w-full"
-        style={{ backgroundColor: "#08080E" }}
-      >
+      {/* Construye tu gemelo */}
+      <section className="w-full" style={{ backgroundColor: "#08080E" }}>
         <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Construye tu gemelo en 4 pasos
-          </p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-center font-display text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
-            Empieza en 30 segundos.{" "}
-            <span
-              className="bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(120deg, var(--color-primary-glow), var(--color-accent))",
-              }}
-            >
-              Mejora cuando quieras.
-            </span>
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-3">Construye tu gemelo</p>
+          <h2 className="text-center font-display text-3xl font-bold text-white sm:text-4xl mb-4">
+            Empieza en 30 segundos. Mejora cuando quieras.
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Cuanto más completo tu gemelo, más valiosas las consultas, más alto
-            el pago. Tú decides hasta dónde llegar.
-          </p>
+          <p className="text-center text-sm text-white/30 mb-16">Más completo el gemelo, más consultas, más ingresos.</p>
 
-          <div ref={containerRef} className="relative mt-14">
-            {/* Vertical timeline line */}
-            <span
-              aria-hidden
-              className="absolute left-[27px] top-2 bottom-2 w-px sm:left-[31px]"
-              style={{
-                background:
-                  "linear-gradient(180deg, var(--color-primary), color-mix(in oklab, var(--color-accent) 80%, transparent))",
-              }}
-            />
-
-            <ol className="space-y-6">
-              {STEPS.map((step, i) => {
-                const Icon = step.icon;
-                const isVisible = visible[i];
-                return (
-                  <li
-                    key={step.title}
-                    data-step-index={i}
-                    className={`relative pl-16 transition-all duration-700 ease-out sm:pl-20 ${
-                      isVisible
-                        ? "translate-y-0 opacity-100"
-                        : "translate-y-6 opacity-0"
-                    }`}
-                  >
-                    {/* Icon node on the line */}
-                    <span
-                      className="absolute left-0 top-1 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-card text-foreground shadow-[0_0_24px_-6px_rgba(124,58,237,0.6)] sm:h-16 sm:w-16"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 25%, var(--color-card)), color-mix(in oklab, var(--color-accent) 18%, var(--color-card)))",
-                      }}
-                    >
-                      <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                    </span>
-
-                    {/* Step card */}
-                    <div className="group rounded-2xl border border-white/10 bg-card/60 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:shadow-[0_20px_50px_-20px_rgba(124,58,237,0.55)] sm:p-6">
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="font-display text-lg font-semibold text-foreground sm:text-xl">
-                          <span className="mr-2 text-muted-foreground">
-                            Paso {i + 1}
-                          </span>
-                          {step.title}
-                        </h3>
-                      </div>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                        {step.body}
-                      </p>
-                      <span
-                        className={`mt-4 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
-                          step.badgeGradient
-                            ? "text-primary-foreground"
-                            : "text-primary-foreground"
-                        }`}
-                        style={
-                          step.badgeGradient
-                            ? {
-                                background:
-                                  "linear-gradient(120deg, var(--color-primary), var(--color-accent))",
-                                boxShadow:
-                                  "0 0 18px -4px color-mix(in oklab, var(--color-accent) 60%, transparent)",
-                              }
-                            : {
-                                background:
-                                  "color-mix(in oklab, var(--color-primary) 85%, transparent)",
-                              }
-                        }
-                      >
-                        {step.badge}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+          <div ref={build.ref} className="space-y-3">
+            {BUILD_STEPS.map((s, i) => (
+              <div
+                key={s.step}
+                className="flex items-start gap-5 rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-5 transition-all duration-700"
+                style={{ opacity: build.visible ? 1 : 0, transform: build.visible ? "none" : "translateY(16px)", transitionDelay: `${i * 100}ms` }}
+              >
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                  style={{ background: "linear-gradient(135deg, #7c3aed, #db2777)" }}
+                >
+                  {s.step}
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-white text-sm">{s.title}</h3>
+                  <p className="text-xs text-white/40 leading-relaxed mt-0.5">{s.body}</p>
+                </div>
+                <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-xs text-white/40">
+                  {s.badge}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
