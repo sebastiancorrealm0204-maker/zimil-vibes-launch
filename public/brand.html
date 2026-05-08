@@ -440,6 +440,9 @@ async function showPanel() {
   // Load pool
   try {
     var resp = await db.from('waitlist').select('name,age_range,city,miv').not('miv','is',null).limit(200);
+    
+    if (resp.error) throw new Error(resp.error.message);
+    
     twins = (resp.data || []).filter(function(r) { return r.miv && r.miv.sensibilidad_precio != null; })
       .map(function(r) { return { name:r.name, age_range:r.age_range, city:r.city, miv:r.miv }; });
 
@@ -452,7 +455,9 @@ async function showPanel() {
     document.getElementById('query-hint').textContent = twins.length + ' gemelos disponibles · Enter para enviar';
     document.getElementById('query-btn').disabled = false;
   } catch(e) {
-    document.getElementById('stat-pool').textContent = '0';
+    document.getElementById('stat-pool').textContent = '!';
+    document.getElementById('stat-cities-sub').textContent = e.message;
+    console.error('Pool load error:', e);
   }
 
   // Query input events
