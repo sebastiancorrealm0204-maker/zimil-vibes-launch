@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZIMIL — Panel de Marcas</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F7F4;color:#111;-webkit-font-smoothing:antialiased}
+.grad{background:linear-gradient(135deg,#7c3aed,#db2777)}
+.grad-text{background:linear-gradient(120deg,#7c3aed,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:40;background:rgba(248,247,244,0.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:20px;font-weight:700;color:#111;text-decoration:none;letter-spacing:-0.03em}
+.nav-badge{background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;margin-left:8px}
+.nav-cta{padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;color:white;border:none;cursor:pointer}
+
+/* ── LANDING ── */
+#landing{display:block}
+.hero{max-width:720px;margin:0 auto;text-align:center;padding:72px 24px 56px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(0,0,0,0.1);background:rgba(0,0,0,0.04);border-radius:99px;padding:5px 14px;font-size:12px;color:#666;margin-bottom:28px}
+.hero-badge span{width:6px;height:6px;border-radius:50%;background:#7c3aed}
+h1{font-size:clamp(36px,6vw,60px);font-weight:700;letter-spacing:-0.03em;line-height:1.06;color:#111;margin-bottom:20px}
+.hero p{font-size:17px;color:#666;line-height:1.7;max-width:520px;margin:0 auto 36px}
+.hero-cta{padding:14px 36px;border-radius:99px;font-size:15px;font-weight:700;color:white;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.25)}
+.hero-cta:hover{opacity:0.88}
+
+/* ── FEATURES ── */
+.section{max-width:960px;margin:0 auto;padding:64px 24px}
+.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:#999;text-align:center;margin-bottom:10px}
+.section h2{font-size:clamp(24px,4vw,36px);font-weight:700;letter-spacing:-0.02em;text-align:center;color:#111;margin-bottom:48px}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.feature-card{background:white;border:1px solid rgba(0,0,0,0.07);border-radius:20px;padding:28px}
+.feature-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.feature-card h3{font-size:16px;font-weight:600;color:#111;margin-bottom:8px}
+.feature-card p{font-size:13px;color:#666;line-height:1.65}
+
+/* ── HOW ── */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.how-step{background:white;border:1px solid rgba(0,0,0,0.07);border-radius:16px;padding:24px;position:relative}
+.step-num{font-size:32px;font-weight:700;color:rgba(0,0,0,0.07);margin-bottom:12px;line-height:1}
+.how-step h3{font-size:14px;font-weight:600;color:#111;margin-bottom:6px}
+.how-step p{font-size:12px;color:#777;line-height:1.6}
+
+/* ── PRICING ── */
+.pricing-card{background:white;border:1px solid rgba(0,0,0,0.07);border-radius:24px;padding:40px;max-width:480px;margin:0 auto;text-align:center}
+.price-big{font-size:56px;font-weight:700;letter-spacing:-0.03em;color:#111;line-height:1}
+.price-sub{font-size:14px;color:#999;margin:8px 0 28px}
+.price-features{text-align:left;margin-bottom:32px}
+.price-feature{display:flex;align-items:center;gap:10px;font-size:14px;color:#555;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.05)}
+.price-feature:last-child{border:none}
+.price-check{color:#7c3aed;font-weight:700}
+
+/* ── CTA BOTTOM ── */
+.cta-section{background:white;border-top:1px solid rgba(0,0,0,0.07);padding:80px 24px;text-align:center}
+.cta-section h2{font-size:clamp(24px,4vw,40px);font-weight:700;color:#111;margin-bottom:16px;letter-spacing:-0.02em}
+.cta-section p{color:#777;margin-bottom:32px;font-size:15px}
+
+footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font-size:13px;color:#999}
+
+/* ── ONBOARDING ── */
+#onboarding{display:none;min-height:100vh;align-items:center;justify-content:center;padding:40px 24px}
+.ob-wrap{width:100%;max-width:520px}
+.ob-progress{display:flex;gap:4px;margin-bottom:40px}
+.ob-bar{flex:1;height:3px;border-radius:99px;background:#E5E7EB;transition:background 0.3s}
+.ob-bar.active{background:linear-gradient(90deg,#7c3aed,#db2777)}
+.ob-step-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:#999;margin-bottom:8px}
+.ob-title{font-size:26px;font-weight:700;color:#111;margin-bottom:6px;letter-spacing:-0.02em}
+.ob-sub{font-size:14px;color:#888;margin-bottom:28px}
+.ob-input{width:100%;height:48px;border:1px solid rgba(0,0,0,0.12);border-radius:12px;background:white;font-size:15px;padding:0 16px;color:#111;outline:none;transition:border 0.2s}
+.ob-input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,0.12)}
+.ob-pills{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.ob-pill{padding:12px 16px;border:1px solid rgba(0,0,0,0.1);border-radius:12px;background:white;font-size:13px;color:#444;cursor:pointer;text-align:left;transition:all 0.15s;line-height:1.4}
+.ob-pill:hover{border-color:#7c3aed;background:#faf5ff;color:#7c3aed}
+.ob-pill.selected{background:linear-gradient(120deg,#7c3aed,#db2777);color:white;border-color:transparent}
+.ob-btn{margin-top:20px;padding:12px 28px;border-radius:99px;font-size:14px;font-weight:600;color:white;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.ob-btn:hover{opacity:0.88}
+
+/* ── PANEL ── */
+#panel{display:none}
+.panel-header{position:sticky;top:0;z-index:40;background:rgba(248,247,244,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.07);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.panel-main{max-width:860px;margin:0 auto;padding:32px 24px}
+.panel-title{font-size:28px;font-weight:700;color:#111;letter-spacing:-0.02em;margin-bottom:6px}
+.panel-sub{font-size:14px;color:#888;margin-bottom:24px}
+.brand-bar{background:#ede9fe;border:1px solid #c4b5fd;border-radius:14px;padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:20px;font-size:13px}
+.brand-bar strong{color:#4c1d95;font-weight:600}
+.brand-tag{background:white;border:1px solid #c4b5fd;border-radius:99px;padding:3px 10px;color:#6d28d9;font-size:12px}
+.query-box{background:white;border:1px solid rgba(0,0,0,0.1);border-radius:18px;padding:16px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.query-textarea{width:100%;resize:none;border:none;background:transparent;font-size:14px;color:#111;outline:none;line-height:1.6;font-family:inherit}
+.query-textarea::placeholder{color:#aaa}
+.query-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.06)}
+.query-hint{font-size:12px;color:#bbb}
+.query-btn{padding:9px 20px;border-radius:99px;font-size:13px;font-weight:600;color:white;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity 0.15s}
+.query-btn:disabled{opacity:0.4;cursor:not-allowed}
+.query-btn:not(:disabled):hover{opacity:0.88}
+.suggestions-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#bbb;margin-bottom:10px}
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.sug-pill{padding:7px 14px;border:1px solid rgba(0,0,0,0.09);border-radius:99px;background:white;font-size:12px;color:#555;cursor:pointer;transition:all 0.15s}
+.sug-pill:hover{border-color:#7c3aed;color:#7c3aed;background:#faf5ff}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-box{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 16px;font-size:13px;color:#dc2626;margin-bottom:16px}
+.result-card{background:white;border:1px solid rgba(0,0,0,0.08);border-radius:20px;overflow:hidden;margin-bottom:20px;transition:box-shadow 0.3s}
+.result-card.newest{border-color:#c4b5fd;box-shadow:0 4px 20px rgba(124,58,237,0.1)}
+.result-header{background:#fafafa;border-bottom:1px solid rgba(0,0,0,0.06);padding:16px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.result-query-label{font-size:11px;color:#bbb;margin-bottom:4px}
+.result-query-text{font-size:13px;font-weight:500;color:#555}
+.export-btn{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:99px;background:white;font-size:12px;color:#666;cursor:pointer;transition:all 0.15s}
+.export-btn:hover{border-color:#7c3aed;color:#7c3aed}
+.result-body{padding:20px}
+.result-insight{font-size:15px;font-weight:500;color:#111;line-height:1.6;margin-bottom:16px}
+.conf-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;border:1px solid}
+.conf-alta{color:#059669;background:#d1fae5;border-color:#a7f3d0}
+.conf-media{color:#d97706;background:#fef3c7;border-color:#fde68a}
+.conf-baja{color:#dc2626;background:#fee2e2;border-color:#fecaca}
+.big-pct{font-size:64px;font-weight:700;letter-spacing:-0.03em;color:#111;line-height:1}
+.big-pct span{font-size:16px;color:#999;font-weight:400;margin-left:6px}
+.pct-bar-track{height:8px;background:#f3f4f6;border-radius:99px;overflow:hidden;margin:10px 0 20px}
+.pct-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c3aed,#db2777);transition:width 1s ease}
+.seg-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#bbb;margin-bottom:12px}
+.seg-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.seg-name{font-size:12px;color:#555;width:150px;flex-shrink:0}
+.seg-track{flex:1;height:5px;background:#f3f4f6;border-radius:99px;overflow:hidden}
+.seg-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c3aed,#db2777)}
+.seg-pct{font-size:12px;color:#bbb;width:28px;text-align:right}
+.rec-box{background:#f5f3ff;border:1px solid #e0d7ff;border-radius:14px;padding:16px;margin-top:16px}
+.rec-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#7c3aed;margin-bottom:6px}
+.rec-text{font-size:13px;color:#444;line-height:1.65}
+.followup-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#bbb;margin:16px 0 8px}
+.followup-item{display:flex;align-items:flex-start;gap:6px;font-size:13px;color:#666;line-height:1.5;margin-bottom:6px}
+.followup-arrow{color:#7c3aed;flex-shrink:0;margin-top:1px}
+.result-footer{display:flex;justify-content:space-between;font-size:12px;color:#bbb;padding-top:14px;margin-top:14px;border-top:1px solid rgba(0,0,0,0.05)}
+.result-footer strong{color:#555}
+
+/* ── POOL STATS ── */
+.pool-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:white;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:14px 16px}
+.stat-label{font-size:11px;color:#aaa;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:700;color:#111;letter-spacing:-0.02em}
+.stat-sub{font-size:11px;color:#bbb;margin-top:3px}
+
+@media(max-width:600px){
+  .ob-pills,.features-grid,.how-grid{grid-template-columns:1fr}
+  .pool-stats{grid-template-columns:repeat(3,1fr)}
+  .stat-val{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex;align-items:center">
+    <a class="nav-logo" href="#">ZIMIL</a>
+    <span class="nav-badge">Panel de Marcas</span>
+  </div>
+  <button class="nav-cta grad" onclick="startOnboarding()">Empezar demo</button>
+</nav>
+
+<!-- LANDING -->
+<div id="landing">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge"><span></span>Investigación de mercado · Colombia</div>
+    <h1>Entiende a tu consumidor <span class="grad-text">antes de gastar en encuestas.</span></h1>
+    <p>ZIMIL tiene un pool de gemelos digitales de consumidores reales. Haz una pregunta en lenguaje natural y recibe un insight accionable en segundos.</p>
+    <button class="hero-cta grad" onclick="startOnboarding()">Ver demo en vivo →</button>
+  </div>
+
+  <!-- Features -->
+  <div style="background:white;border-top:1px solid rgba(0,0,0,0.06)">
+    <div class="section">
+      <div class="section-label">Por qué ZIMIL</div>
+      <h2>Investigación de mercado en segundos, no semanas</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#f5f3ff">🧬</div>
+          <h3>Gemelos digitales reales</h3>
+          <p>Cada gemelo representa la lógica de decisión de un consumidor real colombiano — no encuestas inventadas, patrones de comportamiento reales.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fdf2f8">⚡</div>
+          <h3>Respuesta en segundos</h3>
+          <p>Haz la pregunta en lenguaje natural. En menos de 10 segundos tienes un insight con porcentaje, segmentación y recomendación accionable.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#f0fdf4">💰</div>
+          <h3>Paga solo por lo que preguntas</h3>
+          <p>Sin suscripciones caras. Cada consulta tiene un costo fijo y transparente. Una encuesta tradicional cuesta $5.000 USD. Aquí, centavos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fff7ed">🎯</div>
+          <h3>Personalizado para tu marca</h3>
+          <p>ZIMIL filtra el pool según tu categoría, ciudad y objetivo. Los insights no son genéricos — son específicos para tu negocio.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#eff6ff">🔒</div>
+          <h3>Privacidad total</h3>
+          <p>Los datos crudos de los usuarios nunca salen de sus dispositivos. Tu marca recibe solo el patrón inferido, nunca datos personales reales.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#fafafa">📊</div>
+          <h3>Exporta y comparte</h3>
+          <p>Descarga cada insight como reporte. Llévalo a tu equipo, preséntalo en una reunión, úsalo para tomar decisiones con datos reales.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div style="background:#F8F7F4;border-top:1px solid rgba(0,0,0,0.06)">
+    <div class="section">
+      <div class="section-label">Cómo funciona</div>
+      <h2>De pregunta a insight en 4 pasos</h2>
+      <div class="how-grid">
+        <div class="how-step">
+          <div class="step-num">01</div>
+          <h3>Cuéntanos sobre tu marca</h3>
+          <p>Categoría, tamaño, ciudad y objetivo. 30 segundos y ZIMIL ya sabe qué gemelos son relevantes para ti.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">02</div>
+          <h3>Haz tu pregunta</h3>
+          <p>En lenguaje natural, como le preguntarías a un consultor. Sin formularios, sin opciones predefinidas.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">03</div>
+          <h3>ZIMIL analiza el pool</h3>
+          <p>La IA cruza tu pregunta con los gemelos del pool y calcula una respuesta basada en comportamiento real.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">04</div>
+          <h3>Recibes el insight</h3>
+          <p>Porcentaje, distribución por segmento, recomendación accionable y preguntas de seguimiento sugeridas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <div style="background:white;border-top:1px solid rgba(0,0,0,0.06)">
+    <div class="section">
+      <div class="section-label">Precio</div>
+      <h2>Sin sorpresas. Sin suscripciones.</h2>
+      <div class="pricing-card">
+        <div class="price-big">$0.05</div>
+        <div class="price-sub">USD por consulta · sin mínimo</div>
+        <div class="price-features">
+          <div class="price-feature"><span class="price-check">✓</span> Acceso al pool completo de gemelos</div>
+          <div class="price-feature"><span class="price-check">✓</span> Insight con porcentaje y segmentación</div>
+          <div class="price-feature"><span class="price-check">✓</span> Recomendación personalizada para tu marca</div>
+          <div class="price-feature"><span class="price-check">✓</span> Preguntas de seguimiento sugeridas</div>
+          <div class="price-feature"><span class="price-check">✓</span> Exportar cada resultado como reporte</div>
+          <div class="price-feature"><span class="price-check">✓</span> Sin contrato, sin permanencia</div>
+        </div>
+        <button class="hero-cta grad" style="width:100%;padding:14px" onclick="startOnboarding()">Probar gratis ahora →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA bottom -->
+  <div class="cta-section">
+    <h2>¿Listo para tomar decisiones con datos reales?</h2>
+    <p>El pool de gemelos está disponible ahora. Tu primera consulta en 2 minutos.</p>
+    <button class="hero-cta grad" onclick="startOnboarding()">Empezar demo →</button>
+  </div>
+
+  <footer>ZIMIL · Colombia · 2026 · Tu comportamiento. Tu capital.</footer>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" style="display:none;min-height:calc(100vh - 57px);align-items:center;justify-content:center;padding:40px 24px">
+  <div class="ob-wrap">
+    <div class="ob-progress" id="ob-progress"></div>
+    <div class="ob-step-label" id="ob-step-label">Paso 1 de 6</div>
+    <div class="ob-title" id="ob-title"></div>
+    <div class="ob-sub" id="ob-sub"></div>
+    <div id="ob-content"></div>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div id="panel" style="display:none">
+  <div class="panel-main">
+    <div class="panel-title">Consulta el pool de gemelos</div>
+    <div class="panel-sub">Haz cualquier pregunta en lenguaje natural. ZIMIL analiza los perfiles y te da un insight accionable en segundos.</div>
+    <div class="brand-bar" id="brand-bar"></div>
+    <div class="pool-stats" id="pool-stats">
+      <div class="stat-card"><div class="stat-label">Gemelos en pool</div><div class="stat-val" id="stat-pool">—</div><div class="stat-sub">cargando...</div></div>
+      <div class="stat-card"><div class="stat-label">Ciudades</div><div class="stat-val" id="stat-cities">—</div><div class="stat-sub" id="stat-cities-sub">—</div></div>
+      <div class="stat-card"><div class="stat-label">Segmentos</div><div class="stat-val" id="stat-segs">—</div><div class="stat-sub">tipos de consumidor</div></div>
+    </div>
+    <div class="query-box">
+      <textarea class="query-textarea" id="query-input" rows="2" placeholder="Ej: ¿Qué segmento aceptaría mejor un aumento de precio del 20%?"></textarea>
+      <div class="query-footer">
+        <span class="query-hint" id="query-hint">0 gemelos disponibles</span>
+        <button class="query-btn grad" id="query-btn" onclick="runQuery()" disabled>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Consultar
+        </button>
+      </div>
+    </div>
+    <div id="suggestions-wrap">
+      <div class="suggestions-label">Preguntas sugeridas</div>
+      <div class="suggestions" id="suggestions"></div>
+    </div>
+    <div id="error-box" class="error-box" style="display:none"></div>
+    <div id="results"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://pjphxeefxszkybnmoqdj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqcGh4ZWVmeHN6a3libm1vcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MDc3NTAsImV4cCI6MjA5MjE4Mzc1MH0.GxQrJNVR7h0Xsbs_NDNe3jRPQul24lmL_C2jiCGU97o';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── State ──
+var brand = {};
+var twins = [];
+var historyEntries = [];
+var resultCounter = 0;
+
+// ── Onboarding config ──
+var OB_STEPS = [
+  { field:'nombre', title:'Bienvenida al panel de marcas', sub:'Cuéntanos sobre tu empresa para personalizar cada insight.', type:'input', placeholder:'Ej: Tienda Azul, FoodApp, MiEmpresa...' },
+  { field:'categoria', title:'¿En qué categoría opera?', sub:'Filtramos gemelos con afinidad a tu categoría.', type:'pills',
+    options:['Moda y ropa','Alimentos y delivery','Tech y gadgets','Salud y bienestar','Entretenimiento','Financiero','Viajes y turismo','Educación','Hogar','Otro'] },
+  { field:'tamano', title:'¿Qué tan grande es tu empresa?', sub:'Calibra el nivel de detalle del análisis.', type:'pills',
+    options:['Pequeña (1-10)','Mediana (11-100)','Grande (100-500)','Corporativo (500+)'] },
+  { field:'ciudad', title:'¿Dónde opera principalmente?', sub:'Priorizamos gemelos de tu ciudad.', type:'pills',
+    options:['Bogotá','Medellín','Cali','Barranquilla','Bucaramanga','Nacional','Internacional'] },
+  { field:'objetivo', title:'¿Cuál es tu objetivo hoy?', sub:'Le dice a ZIMIL qué tipo de preguntas te serán más útiles.', type:'pills',
+    options:['Estrategia de precios','Canales de pago','Lanzamiento de producto','Lealtad y retención','Segmentación','Comportamiento de compra'] },
+  { field:'rangoPrecio', title:'¿Cuál es el rango de precio de tu producto?', sub:'Comparamos con el poder adquisitivo del pool.', type:'pills',
+    options:['Menos de $30.000','$30.000–$100.000','$100.000–$300.000','$300.000–$1.000.000','Más de $1.000.000'] },
+];
+var obStep = 0;
+
+function startOnboarding() {
+  document.getElementById('landing').style.display = 'none';
+  var el = document.getElementById('onboarding');
+  el.style.display = 'flex';
+  renderObStep();
+}
+
+function renderObStep() {
+  var step = OB_STEPS[obStep];
+  // Progress bars
+  var bars = '';
+  for (var i = 0; i < OB_STEPS.length; i++) {
+    bars += '<div class="ob-bar' + (i <= obStep ? ' active' : '') + '"></div>';
+  }
+  document.getElementById('ob-progress').innerHTML = bars;
+  document.getElementById('ob-step-label').textContent = 'Paso ' + (obStep+1) + ' de ' + OB_STEPS.length;
+  document.getElementById('ob-title').textContent = step.title;
+  document.getElementById('ob-sub').textContent = step.sub;
+
+  var html = '';
+  if (step.type === 'input') {
+    html = '<input class="ob-input" id="ob-field" type="text" placeholder="' + step.placeholder + '" autocomplete="off">' +
+      '<br><button class="ob-btn grad" style="margin-top:16px" onclick="obNext()">Continuar <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle"><polyline points="9 18 15 12 9 6"/></svg></button>';
+  } else {
+    html = '<div class="ob-pills">';
+    step.options.forEach(function(opt) {
+      var sel = brand[step.field] === opt ? ' selected' : '';
+      html += '<button class="ob-pill' + sel + '" onclick="obSelect(this, '' + opt.replace(/'/g,"\'") + '')">' + opt + '</button>';
+    });
+    html += '</div>';
+  }
+  document.getElementById('ob-content').innerHTML = html;
+
+  if (step.type === 'input') {
+    var inp = document.getElementById('ob-field');
+    if (brand[step.field]) inp.value = brand[step.field];
+    inp.focus();
+    inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); obNext(); } });
+  }
+}
+
+function obSelect(el, val) {
+  var step = OB_STEPS[obStep];
+  brand[step.field] = val;
+  document.querySelectorAll('.ob-pill').forEach(function(p) { p.classList.remove('selected'); });
+  el.classList.add('selected');
+  setTimeout(obNext, 200);
+}
+
+function obNext() {
+  var step = OB_STEPS[obStep];
+  if (step.type === 'input') {
+    var val = (document.getElementById('ob-field') || {}).value || '';
+    if (!val.trim()) return;
+    brand[step.field] = val.trim();
+  }
+  if (!brand[step.field]) return;
+  obStep++;
+  if (obStep >= OB_STEPS.length) {
+    showPanel();
+  } else {
+    renderObStep();
+  }
+}
+
+// ── Panel ──
+async function showPanel() {
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('panel').style.display = 'block';
+
+  // Brand bar
+  document.getElementById('brand-bar').innerHTML =
+    '<strong>' + brand.nombre + '</strong>' +
+    '<span class="brand-tag">' + brand.categoria + '</span>' +
+    '<span class="brand-tag">' + brand.tamano.split(' ')[0] + '</span>' +
+    '<span class="brand-tag">' + brand.ciudad + '</span>' +
+    '<span class="brand-tag">🎯 ' + brand.objetivo + '</span>' +
+    '<span class="brand-tag">' + brand.rangoPrecio + '</span>';
+
+  // Suggestions
+  var sugs = [
+    '¿Cuántos usuarios del pool aceptarían pagar más por envío rápido?',
+    'Si subimos precios 15%, ¿cuántos usuarios buscarían alternativas?',
+    '¿Qué segmento tiene más lealtad de marca en ' + brand.ciudad + '?',
+    'Para ' + brand.categoria + ', ¿qué canal de pago prefiere el pool?',
+    '¿Qué segmento recomendarías atacar primero para ' + brand.categoria + '?',
+  ];
+  var sugHtml = '';
+  sugs.forEach(function(s) {
+    sugHtml += '<button class="sug-pill" onclick="runQueryWith(this.textContent)">' + s + '</button>';
+  });
+  document.getElementById('suggestions').innerHTML = sugHtml;
+
+  // Load pool
+  try {
+    var resp = await db.from('waitlist').select('name,age_range,city,miv').not('miv','is',null).limit(200);
+    twins = (resp.data || []).filter(function(r) { return r.miv && r.miv.sensibilidad_precio != null; })
+      .map(function(r) { return { name:r.name, age_range:r.age_range, city:r.city, miv:r.miv }; });
+
+    var cities = [...new Set(twins.map(function(t) { return t.miv.meta && t.miv.meta.city; }).filter(Boolean))];
+    var segs = [...new Set(twins.map(function(t) { return t.miv.segmento; }))];
+    document.getElementById('stat-pool').textContent = twins.length;
+    document.getElementById('stat-cities').textContent = cities.length;
+    document.getElementById('stat-cities-sub').textContent = cities.slice(0,3).join(', ');
+    document.getElementById('stat-segs').textContent = segs.length;
+    document.getElementById('query-hint').textContent = twins.length + ' gemelos disponibles · Enter para enviar';
+    document.getElementById('query-btn').disabled = false;
+  } catch(e) {
+    document.getElementById('stat-pool').textContent = '0';
+  }
+
+  // Query input events
+  var qi = document.getElementById('query-input');
+  qi.addEventListener('keydown', function(e) {
+    e.stopPropagation();
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); runQuery(); }
+  });
+  qi.addEventListener('keyup', function(e) { e.stopPropagation(); });
+  qi.focus();
+}
+
+function runQueryWith(text) {
+  document.getElementById('query-input').value = text;
+  runQuery();
+}
+
+async function runQuery() {
+  var q = document.getElementById('query-input').value.trim();
+  if (!q || !twins.length) return;
+  setLoading(true);
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('suggestions-wrap').style.display = 'none';
+
+  try {
+    var result = await callGroq(q);
+    var id = ++resultCounter;
+    var entry = { id:id, query:q, result:result, time:new Date() };
+    historyEntries.unshift(entry);
+    renderResult(entry, true);
+    document.getElementById('query-input').value = '';
+  } catch(e) {
+    var eb = document.getElementById('error-box');
+    eb.textContent = e.message || 'Error consultando el pool';
+    eb.style.display = 'block';
+  } finally {
+    setLoading(false);
+  }
+}
+
+function setLoading(on) {
+  var btn = document.getElementById('query-btn');
+  if (on) {
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Analizando...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Consultar';
+  }
+}
+
+function renderResult(entry, isNew) {
+  var r = entry.result;
+  var time = entry.time.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  var confClass = r.confianza === 'Alta' ? 'conf-alta' : r.confianza === 'Media' ? 'conf-media' : 'conf-baja';
+
+  var segsHtml = '';
+  (r.segmentos || []).forEach(function(s) {
+    segsHtml += '<div class="seg-row">' +
+      '<div class="seg-name">' + s.nombre + (s.descripcion ? '<br><span style="color:#bbb;font-size:11px">' + s.descripcion + '</span>' : '') + '</div>' +
+      '<div class="seg-track"><div class="seg-fill" style="width:' + s.pct + '%"></div></div>' +
+      '<div class="seg-pct">' + s.pct + '%</div></div>';
+  });
+
+  var followsHtml = '';
+  (r.follow_ups || []).forEach(function(f) {
+    followsHtml += '<div class="followup-item"><span class="followup-arrow">→</span><span>' + f + '</span></div>';
+  });
+
+  var cardId = 'card-' + entry.id;
+  var html = '<div class="result-card' + (isNew ? ' newest' : '') + '" id="' + cardId + '">' +
+    '<div class="result-header">' +
+      '<div><div class="result-query-label">Consulta · ' + time + '</div>' +
+      '<div class="result-query-text">"' + entry.query + '"</div></div>' +
+      '<button class="export-btn" onclick="exportResult(' + entry.id + ')">⬇ Exportar</button>' +
+    '</div>' +
+    '<div class="result-body">' +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px">' +
+        '<div class="result-insight">' + r.insight + '</div>' +
+        '<span class="conf-badge ' + confClass + '">Confianza ' + r.confianza + '</span>' +
+      '</div>' +
+      '<div class="big-pct">' + r.porcentaje + '<span>% del pool</span></div>' +
+      '<div class="pct-bar-track"><div class="pct-bar-fill" style="width:0%" id="bar-' + entry.id + '"></div></div>' +
+      '<div class="seg-label">Distribución por segmento</div>' +
+      segsHtml +
+      '<div class="rec-box"><div class="rec-label">Recomendación para ' + brand.nombre + '</div><div class="rec-text">' + r.recomendacion + '</div></div>' +
+      (followsHtml ? '<div class="followup-label">Preguntas de seguimiento</div>' + followsHtml : '') +
+      '<div class="result-footer"><span>' + r.pool_size + ' gemelos · ' + brand.categoria + ' · ' + brand.ciudad + '</span><strong>' + r.costo_consulta + '</strong></div>' +
+    '</div></div>';
+
+  var container = document.getElementById('results');
+  container.insertAdjacentHTML('afterbegin', html);
+
+  setTimeout(function() {
+    var bar = document.getElementById('bar-' + entry.id);
+    if (bar) bar.style.width = r.porcentaje + '%';
+    var card = document.getElementById(cardId);
+    if (card && isNew) setTimeout(function() { card.classList.remove('newest'); }, 3000);
+  }, 100);
+}
+
+function exportResult(id) {
+  var entry = historyEntries.find(function(e) { return e.id === id; });
+  if (!entry) return;
+  var r = entry.result;
+  var date = entry.time.toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'});
+  var segs = (r.segmentos||[]).map(function(s) { return '  • ' + s.nombre + ': ' + s.pct + '% — ' + s.descripcion; }).join('\n');
+  var follows = (r.follow_ups||[]).map(function(f) { return '  → ' + f; }).join('\n');
+  var text = [
+    '════════════════════════════════════════',
+    '  ZIMIL — Insight de Investigación',
+    '════════════════════════════════════════',
+    '  Marca: ' + brand.nombre + ' (' + brand.categoria + ')',
+    '  Fecha: ' + date,
+    '  Pool: ' + r.pool_size + ' gemelos consultados',
+    '',
+    '  CONSULTA',
+    '  "' + entry.query + '"',
+    '',
+    '  RESULTADO',
+    '  ' + r.insight,
+    '',
+    '  ' + r.porcentaje + '% del pool  ·  Confianza ' + r.confianza,
+    '',
+    '  DISTRIBUCIÓN POR SEGMENTO',
+    segs,
+    '',
+    '  RECOMENDACIÓN',
+    '  ' + r.recomendacion,
+    '',
+    '  PREGUNTAS DE SEGUIMIENTO',
+    follows,
+    '',
+    '  Costo: ' + r.costo_consulta,
+    '════════════════════════════════════════',
+    '  zimil-vibes-launch.vercel.app/brand.html',
+    '════════════════════════════════════════',
+  ].join('\n');
+  var blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'zimil-insight-' + id + '.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function callGroq(pregunta) {
+  var poolResumen = twins.map(function(t, i) {
+    return 'Gemelo ' + (i+1) + ': ' + t.miv.segmento + ', ' + t.age_range + ' años, ' + t.city + '. ' +
+      'Precio: ' + t.miv.sensibilidad_precio + ', Lealtad: ' + t.miv.lealtad_marca + ', ' +
+      'Tech: ' + t.miv.adopcion_tecnologica + ', Orientación: ' + t.miv.orientacion + '. ' +
+      'Categorías: ' + (t.miv.categoria_top||[]).join(', ') + '.';
+  }).join('\n');
+
+  var systemPrompt = 'Eres el motor de simulación de ZIMIL. Pool de ' + twins.length + ' gemelos digitales colombianos.\n\n' +
+    'CONTEXTO DE LA MARCA:\n' +
+    '- Empresa: ' + brand.nombre + '\n' +
+    '- Categoría: ' + brand.categoria + '\n' +
+    '- Tamaño: ' + brand.tamano + '\n' +
+    '- Ciudad: ' + brand.ciudad + '\n' +
+    '- Objetivo: ' + brand.objetivo + '\n' +
+    '- Rango de precio: ' + brand.rangoPrecio + '\n\n' +
+    'POOL:\n' + poolResumen + '\n\n' +
+    'Responde SOLO con JSON válido sin markdown:\n' +
+    '{"insight":"hallazgo principal 1-2 oraciones","porcentaje":número,"confianza":"Alta"|"Media"|"Baja",' +
+    '"segmentos":[{"nombre":"segmento","pct":número,"descripcion":"por qué responde así"}],' +
+    '"recomendacion":"acción concreta para ' + brand.nombre + '",' +
+    '"follow_ups":["pregunta 1","pregunta 2","pregunta 3"],' +
+    '"pool_size":' + twins.length + ',"costo_consulta":"$' + (twins.length*0.05).toFixed(2) + ' USD"}';
+
+  var resp = await fetch('/api/groq', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: pregunta }
+      ]
+    })
+  });
+
+  if (!resp.ok) throw new Error('Error del servidor: ' + resp.status);
+  var data = await resp.json();
+  var raw = (data.choices[0].message.content || '{}').replace(/```json|```/g,'').trim();
+  try { return JSON.parse(raw); }
+  catch(e) { throw new Error('No se pudo parsear la respuesta'); }
+}
+</script>
+</body>
+</html>
