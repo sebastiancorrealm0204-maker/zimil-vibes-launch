@@ -271,6 +271,64 @@ footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font
   <footer>ZIMIL · Colombia · 2026 · Tu comportamiento. Tu capital.</footer>
 </div>
 
+<!-- ACCESS GATE -->
+<div id="access-gate" style="display:none">
+  <div style="width:100%;max-width:480px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:40px;margin-bottom:12px">🧬</div>
+      <h2 style="font-size:24px;font-weight:700;color:#111;margin-bottom:8px;letter-spacing:-0.02em">Accede al panel de marcas</h2>
+      <p style="font-size:14px;color:#888;line-height:1.6">Si ya tienes un código de acceso, úsalo abajo.<br>Si no, solicita uno y te lo enviamos en 24h.</p>
+    </div>
+
+    <!-- Code entry -->
+    <div style="background:white;border:1px solid rgba(0,0,0,0.08);border-radius:20px;padding:24px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#999;margin-bottom:12px">Ya tengo un código</div>
+      <div style="display:flex;gap:8px">
+        <input id="code-input" type="text" placeholder="Ej: ZIMIL-2026" autocomplete="off"
+          style="flex:1;height:44px;border:1px solid rgba(0,0,0,0.12);border-radius:10px;padding:0 14px;font-size:14px;color:#111;outline:none;font-family:monospace;text-transform:uppercase"
+          onkeydown="if(event.key==='Enter'){verifyCode()}" onkeyup="event.stopPropagation()">
+        <button id="code-btn" onclick="verifyCode()"
+          style="padding:0 20px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:600;color:white;background:linear-gradient(135deg,#7c3aed,#db2777);white-space:nowrap">
+          Acceder
+        </button>
+      </div>
+      <div id="code-error" style="display:none;color:#dc2626;font-size:12px;margin-top:8px"></div>
+    </div>
+
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:12px;margin:20px 0">
+      <div style="flex:1;height:1px;background:rgba(0,0,0,0.08)"></div>
+      <span style="font-size:12px;color:#bbb">o solicita acceso</span>
+      <div style="flex:1;height:1px;background:rgba(0,0,0,0.08)"></div>
+    </div>
+
+    <!-- Request form -->
+    <div style="background:white;border:1px solid rgba(0,0,0,0.08);border-radius:20px;padding:24px">
+      <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#999;margin-bottom:16px">Solicitar código de acceso</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input id="req-nombre" type="text" placeholder="Tu nombre" autocomplete="off"
+          style="height:42px;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:0 12px;font-size:13px;color:#111;outline:none"
+          onkeyup="event.stopPropagation()" onkeydown="event.stopPropagation()">
+        <input id="req-cargo" type="text" placeholder="Tu cargo" autocomplete="off"
+          style="height:42px;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:0 12px;font-size:13px;color:#111;outline:none"
+          onkeyup="event.stopPropagation()" onkeydown="event.stopPropagation()">
+      </div>
+      <input id="req-empresa" type="text" placeholder="Nombre de tu empresa" autocomplete="off"
+        style="width:100%;height:42px;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:0 12px;font-size:13px;color:#111;outline:none;margin-bottom:10px"
+        onkeyup="event.stopPropagation()" onkeydown="event.stopPropagation()">
+      <input id="req-email" type="email" placeholder="Tu email corporativo" autocomplete="off"
+        style="width:100%;height:42px;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:0 12px;font-size:13px;color:#111;outline:none;margin-bottom:14px"
+        onkeyup="event.stopPropagation()" onkeydown="event.stopPropagation()">
+      <div id="req-error" style="display:none;color:#dc2626;font-size:12px;margin-bottom:10px"></div>
+      <button id="req-btn" onclick="submitAccessRequest()"
+        style="width:100%;padding:12px;border-radius:99px;border:none;cursor:pointer;font-size:14px;font-weight:600;color:white;background:linear-gradient(135deg,#7c3aed,#db2777)">
+        Solicitar acceso
+      </button>
+    </div>
+  </div>
+</div>
+
+
 <!-- ONBOARDING -->
 <div id="onboarding" style="display:none;min-height:calc(100vh - 57px)">
   <div class="ob-wrap">
@@ -293,7 +351,7 @@ footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font
       <div class="stat-card"><div class="stat-label">Ciudades</div><div class="stat-val" id="stat-cities">—</div><div class="stat-sub" id="stat-cities-sub">—</div></div>
       <div class="stat-card"><div class="stat-label">Segmentos</div><div class="stat-val" id="stat-segs">—</div><div class="stat-sub">tipos de consumidor</div></div>
     </div>
-    <div class="query-box">
+    <div class="query-box" id="query-box-wrap">
       <textarea class="query-textarea" id="query-input" rows="2" placeholder="Ej: ¿Qué segmento aceptaría mejor un aumento de precio del 20%?"></textarea>
       <div class="query-footer">
         <span class="query-hint" id="query-hint">0 gemelos disponibles</span>
@@ -318,6 +376,11 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── State ──
+// ── Access control ──
+var ACCESS_CODE = '';
+var QUERIES_USED = 0;
+var MAX_QUERIES = 2;
+
 var brand = {};
 var twins = [];
 var historyEntries = [];
@@ -342,10 +405,92 @@ var obStep = 0;
 function startOnboarding() {
   try {
     document.getElementById('landing').style.display = 'none';
+    document.getElementById('access-gate').style.cssText = 'display:flex;min-height:calc(100vh - 57px);align-items:center;justify-content:center;padding:40px 24px';
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+}
+
+async function submitAccessRequest() {
+  var nombre = document.getElementById('req-nombre').value.trim();
+  var empresa = document.getElementById('req-empresa').value.trim();
+  var email = document.getElementById('req-email').value.trim();
+  var cargo = document.getElementById('req-cargo').value.trim();
+  var btn = document.getElementById('req-btn');
+
+  if (!nombre || !empresa || !email) {
+    document.getElementById('req-error').textContent = 'Completa nombre, empresa y email.';
+    document.getElementById('req-error').style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    await db.from('brand_leads').insert({ nombre, empresa, email, cargo, estado: 'pendiente' });
+    document.getElementById('access-gate').innerHTML = 
+      '<div style="max-width:440px;text-align:center;padding:40px 24px">' +
+      '<div style="font-size:52px;margin-bottom:20px">📬</div>' +
+      '<h2 style="font-size:24px;font-weight:700;color:#111;margin-bottom:12px">Solicitud recibida</h2>' +
+      '<p style="color:#777;font-size:15px;line-height:1.7">Revisaremos tu solicitud y te enviaremos un código de acceso a <strong>' + email + '</strong> en menos de 24 horas.</p>' +
+      '</div>';
+  } catch(e) {
+    document.getElementById('req-error').textContent = 'Error al enviar. Intenta de nuevo.';
+    document.getElementById('req-error').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Solicitar acceso';
+  }
+}
+
+async function verifyCode() {
+  var code = document.getElementById('code-input').value.trim().toUpperCase();
+  var btn = document.getElementById('code-btn');
+  var err = document.getElementById('code-error');
+
+  if (!code) { err.textContent = 'Ingresa tu código.'; err.style.display = 'block'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  err.style.display = 'none';
+
+  try {
+    var resp = await db.from('demo_codes').select('*').eq('code', code).single();
+    if (resp.error || !resp.data) throw new Error('Código inválido o expirado.');
+    var row = resp.data;
+    if (row.usado >= row.max_consultas) throw new Error('Este código ya alcanzó el límite de consultas.');
+    
+    ACCESS_CODE = code;
+    QUERIES_USED = row.usado || 0;
+
+    document.getElementById('access-gate').style.display = 'none';
     document.getElementById('onboarding').style.cssText = 'display:flex;min-height:calc(100vh - 57px);align-items:center;justify-content:center;padding:40px 24px';
     renderObStep();
   } catch(e) {
-    alert('Error: ' + e.message);
+    err.textContent = e.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Acceder';
+  }
+}
+
+async function requestMoreAccess() {
+  var btn = document.getElementById('more-access-btn');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  try {
+    await db.from('brand_leads').insert({
+      nombre: brand.nombre || 'Demo user',
+      empresa: brand.nombre || '—',
+      email: '(desde demo con código ' + ACCESS_CODE + ')',
+      cargo: brand.categoria || '—',
+      estado: 'quiere_mas_acceso',
+      notas: 'Código: ' + ACCESS_CODE + ' | Categoría: ' + brand.categoria + ' | Ciudad: ' + brand.ciudad
+    });
+    btn.textContent = '✓ Solicitud enviada — te contactamos pronto';
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Quiero más acceso';
   }
 }
 
@@ -478,6 +623,12 @@ function runQueryWith(text) {
 async function runQuery() {
   var q = document.getElementById('query-input').value.trim();
   if (!q || !twins.length) return;
+
+  if (QUERIES_USED >= MAX_QUERIES) {
+    showLimitReached();
+    return;
+  }
+
   setLoading(true);
   document.getElementById('error-box').style.display = 'none';
   document.getElementById('suggestions-wrap').style.display = 'none';
@@ -489,6 +640,20 @@ async function runQuery() {
     historyEntries.unshift(entry);
     renderResult(entry, true);
     document.getElementById('query-input').value = '';
+    QUERIES_USED++;
+
+    // Update usage in Supabase
+    if (ACCESS_CODE) {
+      await db.from('demo_codes').update({ usado: QUERIES_USED }).eq('code', ACCESS_CODE);
+    }
+
+    // Show limit warning after last query
+    if (QUERIES_USED >= MAX_QUERIES) {
+      setTimeout(showLimitReached, 800);
+    } else {
+      var remaining = MAX_QUERIES - QUERIES_USED;
+      document.getElementById('query-hint').textContent = twins.length + ' gemelos · ' + remaining + ' consulta' + (remaining > 1 ? 's' : '') + ' restante' + (remaining > 1 ? 's' : '');
+    }
   } catch(e) {
     var eb = document.getElementById('error-box');
     eb.textContent = e.message || 'Error consultando el pool';
@@ -496,6 +661,23 @@ async function runQuery() {
   } finally {
     setLoading(false);
   }
+}
+
+function showLimitReached() {
+  var qbox = document.getElementById('query-box-wrap');
+  if (qbox) qbox.style.display = 'none';
+  var existing = document.getElementById('limit-banner');
+  if (existing) return;
+  var banner = document.createElement('div');
+  banner.id = 'limit-banner';
+  banner.style.cssText = 'background:linear-gradient(135deg,#7c3aed15,#db277715);border:1px solid #c4b5fd;border-radius:20px;padding:28px;text-align:center;margin-bottom:24px';
+  banner.innerHTML = 
+    '<div style="font-size:36px;margin-bottom:12px">🔒</div>' +
+    '<h3 style="font-size:18px;font-weight:700;color:#111;margin-bottom:8px">Alcanzaste el límite de la demo</h3>' +
+    '<p style="font-size:14px;color:#666;margin-bottom:20px;line-height:1.6">Has usado tus 2 consultas de prueba. ¿Quieres acceso completo para seguir investigando?</p>' +
+    '<button id="more-access-btn" onclick="requestMoreAccess()" style="padding:12px 28px;border-radius:99px;border:none;cursor:pointer;font-size:14px;font-weight:600;color:white;background:linear-gradient(135deg,#7c3aed,#db2777)">Quiero más acceso</button>';
+  var results = document.getElementById('results');
+  results.parentNode.insertBefore(banner, results);
 }
 
 function setLoading(on) {
