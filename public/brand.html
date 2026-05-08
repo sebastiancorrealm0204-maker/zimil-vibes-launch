@@ -189,7 +189,7 @@ footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font
         <div class="feature-card">
           <div class="feature-icon" style="background:#f0fdf4">💰</div>
           <h3>Paga solo por lo que preguntas</h3>
-          <p>Sin suscripciones caras. Cada consulta tiene un costo fijo y transparente. Una encuesta tradicional cuesta $5.000 USD. Aquí, centavos.</p>
+          <p>Sin suscripciones, sin contratos. Pagas solo cuando consultas, con total transparencia sobre lo que recibes a cambio.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:#fff7ed">🎯</div>
@@ -236,27 +236,6 @@ footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font
           <h3>Recibes el insight</h3>
           <p>Porcentaje, distribución por segmento, recomendación accionable y preguntas de seguimiento sugeridas.</p>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pricing -->
-  <div style="background:white;border-top:1px solid rgba(0,0,0,0.06)">
-    <div class="section">
-      <div class="section-label">Precio</div>
-      <h2>Sin sorpresas. Sin suscripciones.</h2>
-      <div class="pricing-card">
-        <div class="price-big">$0.05</div>
-        <div class="price-sub">USD por consulta · sin mínimo</div>
-        <div class="price-features">
-          <div class="price-feature"><span class="price-check">✓</span> Acceso al pool completo de gemelos</div>
-          <div class="price-feature"><span class="price-check">✓</span> Insight con porcentaje y segmentación</div>
-          <div class="price-feature"><span class="price-check">✓</span> Recomendación personalizada para tu marca</div>
-          <div class="price-feature"><span class="price-check">✓</span> Preguntas de seguimiento sugeridas</div>
-          <div class="price-feature"><span class="price-check">✓</span> Exportar cada resultado como reporte</div>
-          <div class="price-feature"><span class="price-check">✓</span> Sin contrato, sin permanencia</div>
-        </div>
-        <button class="hero-cta grad" style="width:100%;padding:14px" onclick="startOnboarding()">Probar gratis ahora →</button>
       </div>
     </div>
   </div>
@@ -727,7 +706,7 @@ function renderResult(entry, isNew) {
       segsHtml +
       '<div class="rec-box"><div class="rec-label">Recomendación para ' + brand.nombre + '</div><div class="rec-text">' + r.recomendacion + '</div></div>' +
       (followsHtml ? '<div class="followup-label">Preguntas de seguimiento</div>' + followsHtml : '') +
-      '<div class="result-footer"><span>' + r.pool_size + ' gemelos · ' + brand.categoria + ' · ' + brand.ciudad + '</span><strong>' + r.costo_consulta + '</strong></div>' +
+      '<div class="result-footer"><span>' + r.pool_size + ' gemelos consultados · ' + brand.categoria + ' · ' + brand.ciudad + '</span></div>' +
     '</div></div>';
 
   var container = document.getElementById('results');
