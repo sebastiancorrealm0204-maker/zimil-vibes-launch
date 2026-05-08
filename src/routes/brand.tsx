@@ -2,8 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { consultarPool, type Twin, type InsightResult } from "@/lib/groq";
-import { SYNTHETIC_TWINS } from "@/lib/syntheticTwins";
-import { Send, Users, Zap, Lock, ChevronDown, ChevronUp } from "lucide-react";
+import { Send, Users, Zap, TrendingDown, TrendingUp, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/brand")({
   head: () => ({ meta: [{ title: "ZIMIL — Panel de Marcas" }] }),
@@ -31,8 +30,8 @@ function PoolStats({ twins }: { twins: Twin[] }) {
       {[
         { label: "Gemelos en pool", value: twins.length.toString(), icon: <Users className="h-4 w-4" /> },
         { label: "Segmentos", value: Object.keys(segmentos).length.toString(), icon: <Zap className="h-4 w-4" /> },
-        { label: "Sensib. precio prom.", value: avgPrecio, icon: <ChevronDown className="h-4 w-4" /> },
-        { label: "Adopción tech prom.", value: avgTech, icon: <ChevronUp className="h-4 w-4" /> },
+        { label: "Sensib. precio prom.", value: avgPrecio, icon: <TrendingDown className="h-4 w-4" /> },
+        { label: "Adopción tech prom.", value: avgTech, icon: <TrendingUp className="h-4 w-4" /> },
       ].map((s) => (
         <div key={s.label} className="rounded-xl border border-black/8 bg-white p-4">
           <div className="flex items-center gap-2 text-violet-600 mb-2">{s.icon}<span className="text-xs text-gray-400">{s.label}</span></div>
@@ -133,17 +132,15 @@ function BrandPanel() {
           .from("waitlist")
           .select("name, age_range, city, miv")
           .not("miv", "is", null)
-          .limit(100);
+          .limit(200);
 
         const realTwins: Twin[] = (data || [])
           .filter((r) => r.miv?.sensibilidad_precio != null)
           .map((r) => ({ name: r.name, age_range: r.age_range, city: r.city, miv: r.miv }));
 
-        // Merge real + synthetic
-        const allTwins = [...realTwins, ...SYNTHETIC_TWINS] as Twin[];
-        setTwins(allTwins);
+        setTwins(realTwins);
       } catch {
-        setTwins(SYNTHETIC_TWINS as Twin[]);
+        setTwins([]);
       } finally {
         setPoolLoading(false);
       }
