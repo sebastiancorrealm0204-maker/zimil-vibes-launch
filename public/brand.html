@@ -369,7 +369,7 @@ function renderObStep() {
     html = '<div class="ob-pills">';
     step.options.forEach(function(opt) {
       var sel = brand[step.field] === opt ? ' selected' : '';
-      html += '<button class="ob-pill' + sel + '" onclick="obSelect(this, '' + opt.replace(/'/g,"\'") + '')">' + opt + '</button>';
+      html += '<button class="ob-pill' + sel + '" onclick="obSelect(this, &quot;' + opt + '&quot;)">' + opt + '</button>';
     });
     html += '</div>';
   }
@@ -385,7 +385,9 @@ function renderObStep() {
 
 function obSelect(el, val) {
   var step = OB_STEPS[obStep];
-  brand[step.field] = val;
+  // decode HTML entities if needed
+  var txt = el.textContent.trim();
+  brand[step.field] = txt;
   document.querySelectorAll('.ob-pill').forEach(function(p) { p.classList.remove('selected'); });
   el.classList.add('selected');
   setTimeout(obNext, 200);
