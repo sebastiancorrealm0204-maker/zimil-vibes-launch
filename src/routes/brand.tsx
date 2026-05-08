@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { consultarPool, type Twin, type InsightResult } from "@/lib/groq";
-import { Send, Users, Zap, TrendingDown, TrendingUp, Lock } from "lucide-react";
+import { Send, Users, Zap, TrendingUp, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/brand")({
   head: () => ({ meta: [{ title: "ZIMIL — Panel de Marcas" }] }),
@@ -18,24 +18,24 @@ const SUGGESTED = [
 ];
 
 function PoolStats({ twins }: { twins: Twin[] }) {
-  const segmentos = twins.reduce((acc: Record<string, number>, t) => {
+  const segmentos = Object.keys(twins.reduce((acc: Record<string, number>, t) => {
     acc[t.miv.segmento] = (acc[t.miv.segmento] || 0) + 1;
     return acc;
-  }, {});
-  const avgPrecio = (twins.reduce((s, t) => s + t.miv.sensibilidad_precio, 0) / twins.length).toFixed(2);
-  const avgTech = (twins.reduce((s, t) => s + t.miv.adopcion_tecnologica, 0) / twins.length).toFixed(2);
+  }, {}));
+
+  const ciudades = [...new Set(twins.map(t => t.miv.meta.city))].filter(Boolean);
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-8">
+    <div className="grid grid-cols-3 gap-3 mb-8">
       {[
-        { label: "Gemelos en pool", value: twins.length.toString(), icon: <Users className="h-4 w-4" /> },
-        { label: "Segmentos", value: Object.keys(segmentos).length.toString(), icon: <Zap className="h-4 w-4" /> },
-        { label: "Sensib. precio prom.", value: avgPrecio, icon: <TrendingDown className="h-4 w-4" /> },
-        { label: "Adopción tech prom.", value: avgTech, icon: <TrendingUp className="h-4 w-4" /> },
+        { label: "Gemelos en pool", value: twins.length.toString(), icon: <Users className="h-4 w-4" />, sub: "perfiles activos" },
+        { label: "Ciudades", value: ciudades.length.toString(), icon: <Zap className="h-4 w-4" />, sub: ciudades.slice(0, 3).join(", ") + (ciudades.length > 3 ? "..." : "") },
+        { label: "Segmentos", value: segmentos.length.toString(), icon: <TrendingUp className="h-4 w-4" />, sub: "tipos de consumidor" },
       ].map((s) => (
         <div key={s.label} className="rounded-xl border border-black/8 bg-white p-4">
           <div className="flex items-center gap-2 text-violet-600 mb-2">{s.icon}<span className="text-xs text-gray-400">{s.label}</span></div>
           <p className="font-display text-2xl font-bold text-gray-900">{s.value}</p>
+          <p className="text-xs text-gray-400 mt-1">{s.sub}</p>
         </div>
       ))}
     </div>
