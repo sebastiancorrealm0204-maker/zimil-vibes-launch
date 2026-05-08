@@ -111,7 +111,12 @@ function Onboarding({ onComplete }: { onComplete: (p: BrandProfile) => void }) {
     }
   }
 
+  function stopProp(e: React.KeyboardEvent) {
+    e.stopPropagation();
+  }
+
   function handleInput(e: React.KeyboardEvent<HTMLInputElement>) {
+    e.stopPropagation();
     if (e.key === "Enter") {
       const val = (e.target as HTMLInputElement).value.trim();
       if (val) select(val);
@@ -142,6 +147,8 @@ function Onboarding({ onComplete }: { onComplete: (p: BrandProfile) => void }) {
             placeholder={current.placeholder}
             defaultValue={value}
             onKeyDown={handleInput}
+            onKeyUp={stopProp}
+            onKeyPress={stopProp}
             className="w-full h-12 rounded-xl border border-black/10 bg-white px-4 text-sm text-gray-800 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
           />
         ) : (
@@ -438,7 +445,8 @@ function BrandPanel() {
         <div className="rounded-2xl border border-black/8 bg-white p-4 mb-6 shadow-sm">
           <textarea ref={inputRef} value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKey}
+            onKeyDown={(e) => { e.stopPropagation(); handleKey(e); }}
+            onKeyUp={(e) => e.stopPropagation()}
             placeholder={`Ej: ¿Qué segmento de ${brand.ciudad} aceptaría mejor un aumento de precio para ${brand.categoria}?`}
             rows={2}
             className="w-full resize-none bg-transparent text-sm text-gray-800 placeholder-gray-400 outline-none leading-relaxed" />
