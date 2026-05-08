@@ -61,7 +61,7 @@ h1{font-size:clamp(36px,6vw,60px);font-weight:700;letter-spacing:-0.03em;line-he
 footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font-size:13px;color:#999}
 
 /* ── ONBOARDING ── */
-#onboarding{display:none;min-height:100vh;align-items:center;justify-content:center;padding:40px 24px}
+#onboarding{min-height:100vh;align-items:center;justify-content:center;padding:40px 24px}
 .ob-wrap{width:100%;max-width:520px}
 .ob-progress{display:flex;gap:4px;margin-bottom:40px}
 .ob-bar{flex:1;height:3px;border-radius:99px;background:#E5E7EB;transition:background 0.3s}
@@ -272,7 +272,7 @@ footer{border-top:1px solid rgba(0,0,0,0.07);padding:24px;text-align:center;font
 </div>
 
 <!-- ONBOARDING -->
-<div id="onboarding" style="display:none;min-height:calc(100vh - 57px);align-items:center;justify-content:center;padding:40px 24px">
+<div id="onboarding" style="display:none;min-height:calc(100vh - 57px)">
   <div class="ob-wrap">
     <div class="ob-progress" id="ob-progress"></div>
     <div class="ob-step-label" id="ob-step-label">Paso 1 de 6</div>
@@ -340,10 +340,13 @@ var OB_STEPS = [
 var obStep = 0;
 
 function startOnboarding() {
-  document.getElementById('landing').style.display = 'none';
-  var el = document.getElementById('onboarding');
-  el.style.display = 'flex';
-  renderObStep();
+  try {
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('onboarding').style.cssText = 'display:flex;min-height:calc(100vh - 57px);align-items:center;justify-content:center;padding:40px 24px';
+    renderObStep();
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
 }
 
 function renderObStep() {
