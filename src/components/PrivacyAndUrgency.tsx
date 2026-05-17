@@ -69,7 +69,7 @@ export function PrivacyAndUrgency() {
         <div className="mx-auto w-full max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 mb-3">Por qué ahora</p>
           <h2 className="text-center font-display text-3xl font-bold text-gray-900 sm:text-4xl mb-3">
-            El primer millar lo cambia todo.
+            Entra primero y podrás ganar más.
           </h2>
           <p className="text-center text-sm text-gray-400 mb-14 max-w-xl mx-auto">
             ZIMIL vale más cuando hay más gemelos. Los que entran primero son los más consultados — porque son los únicos disponibles para las marcas del piloto.
